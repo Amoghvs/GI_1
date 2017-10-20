@@ -89,7 +89,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     public  LatLng my_loc;
     public List<Address> addresses;
     public String address,city,state,country,knownName,postalCode;
-    int i=0,rando,final_val;
+    int i=0,rando,j=0;
     public double val;
     Marker marker,j1,j2,j3,i1,i2,i3;
     Button mylocation;
@@ -168,12 +168,25 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
             }
         }, 1000);
         mMap.setTrafficEnabled(true);
         mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
 
+        place_marker();
+    }
+
+    private void place_marker() {
+        j++;
+        if (j>1){
+            j1.remove();
+            j2.remove();
+            j3.remove();
+            i1.remove();
+            i2.remove();
+            i3.remove();
+        }
         Random r = new Random();
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
