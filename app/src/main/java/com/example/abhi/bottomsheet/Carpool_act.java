@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -45,14 +46,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Carpool_act extends FragmentActivity implements OnMapReadyCallback, PlaceSelectionListener {
-
-    private static final String LOG_TAG = "PlaceSelectionListener";
-
-    AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
-            .setCountry("IN")
-            .build();
-
-
 
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -81,10 +74,14 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
     }
 
+    private static final String LOG_TAG = "PlaceSelectionListener";
 
+    AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+            .setCountry("IN")
+            .build();
     private GoogleMap mMap;
     GPSTracker gps;
-    public double latitude,longitude,new_lat,new_lng;
+    public double latitude,longitude,new_lat,new_lng,calc_dist;
     public LatLng latLng;
     public  LatLng my_loc;
     public List<Address> addresses;
@@ -93,6 +90,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     public double val;
     Marker marker,j1,j2,j3,i1,i2,i3;
     Button mylocation;
+    char k,n;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,11 +189,15 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
 
+        new_lat=latitude+val;
+        new_lng=longitude+val;
+        calc_dist=distance(latitude,longitude,new_lat,new_lng,n);
+
         j1 = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude+val, longitude+val))
+                .position(new LatLng(new_lat, new_lng))
                 .infoWindowAnchor(0.5f, 0.5f)
                 .title("Akash")
-                .snippet("5 km away")
+                .snippet(Double.toString(calc_dist)+" km away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         ///mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
@@ -203,47 +205,63 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
+        new_lat=latitude-val;
+        new_lng=longitude+val;
+        calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
+
         j2 = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude-val, longitude+val))
+                .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Abhinav")
-                .snippet("3.7 km away")
+                .snippet(Double.toString(calc_dist)+" km away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
+        new_lat=latitude-val;
+        new_lng=longitude-val;
+        calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
         j3 = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude-val, longitude-val))
+                .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Shivam")
-                .snippet("2.5 km away")
+                .snippet(Double.toString(calc_dist)+" km away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
+        new_lat=latitude+val;
+        new_lng=longitude-val;
+        calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
         i1 = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude+val, longitude-val))
+                .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Sasidhar")
-                .snippet("4.2 km away")
+                .snippet(Double.toString(calc_dist)+" km away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
+        new_lat=latitude-val;
+        new_lng=longitude-val;
+        calc_dist=distance(latitude,longitude,new_lat,new_lng,n);
         i2 = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude-val, longitude-val))
+                .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Somanath")
-                .snippet("3.6 km away")
+                .snippet(Double.toString(calc_dist)+" km away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
+        new_lat=latitude-val;
+        new_lng=longitude+val;
+        calc_dist=distance(latitude,longitude,new_lat,new_lng,n);
         i3 = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude-val, longitude+val))
+                .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Mohit")
-                .snippet("1.6 km away")
+                .snippet(Double.toString(calc_dist)+" km away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
 
@@ -283,4 +301,29 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     }
 
 
+    public static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        if (unit == 'k') {
+            dist = dist * 1.609344;
+        } else if (unit == 'n') {
+            dist = dist * 0.8684;
+        }
+        DecimalFormat df = new DecimalFormat("#.##");
+        dist = Double.valueOf(df.format(dist));
+        return (dist);
+    }
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*::  This function converts radians to decimal degrees             :*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
 }
