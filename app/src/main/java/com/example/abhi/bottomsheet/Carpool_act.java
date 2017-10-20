@@ -174,6 +174,66 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         mMap.setTrafficEnabled(true);
         mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
 
+        Random r = new Random();
+        rando = r.nextInt(10 - 1) + 1;
+        val=rando*0.001;
+
+        j1 = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude+val, longitude+val))
+                .infoWindowAnchor(0.5f, 0.5f)
+                .title("Akash")
+                .snippet("5 km away")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+        ///mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
+
+
+        rando = r.nextInt(10 - 1) + 1;
+        val=rando*0.001;
+        j2 = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude-val, longitude+val))
+                .anchor(0.5f, 0.5f)
+                .title("Abhinav")
+                .snippet("3.7 km away")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+        rando = r.nextInt(10 - 1) + 1;
+        val=rando*0.001;
+        j3 = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude-val, longitude-val))
+                .anchor(0.5f, 0.5f)
+                .title("Shivam")
+                .snippet("2.5 km away")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+        rando = r.nextInt(10 - 1) + 1;
+        val=rando*0.001;
+        i1 = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude+val, longitude-val))
+                .anchor(0.5f, 0.5f)
+                .title("Sasidhar")
+                .snippet("4.2 km away")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+
+        rando = r.nextInt(10 - 1) + 1;
+        val=rando*0.001;
+        i2 = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude-val, longitude-val))
+                .anchor(0.5f, 0.5f)
+                .title("Somanath")
+                .snippet("3.6 km away")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+
+        rando = r.nextInt(10 - 1) + 1;
+        val=rando*0.001;
+        i3 = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude-val, longitude+val))
+                .anchor(0.5f, 0.5f)
+                .title("Mohit")
+                .snippet("1.6 km away")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+
+
 
     }
 
