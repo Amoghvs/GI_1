@@ -62,6 +62,12 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
             tvTitle.setText(marker.getTitle());
             TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
             tvSnippet.setText(marker.getSnippet());
+            tvTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(),"hi",Toast.LENGTH_SHORT).show();
+                }
+            });
 
             return myContentsView;
         }
@@ -76,6 +82,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
     private static final String LOG_TAG = "PlaceSelectionListener";
 
+
     AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
             .setCountry("IN")
             .build();
@@ -89,7 +96,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     int i=0,rando,j=0;
     public double val;
     Marker marker,j1,j2,j3,i1,i2,i3;
-    Button mylocation;
+    Button mylocation,join,initiate;
     char k,n;
 
     @Override
@@ -109,6 +116,32 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         autocompleteFragment.setFilter(typeFilter);
 
 
+        initiate = (Button) findViewById(R.id.initiateb);
+        initiate.setVisibility(View.INVISIBLE);
+        initiate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                i1.setVisible(false);
+                i2.setVisible(false);
+                i3.setVisible(false);
+                j1.setVisible(true);
+                j2.setVisible(true);
+                j3.setVisible(true);
+            }
+        });
+        join = (Button) findViewById(R.id.joinb);
+        join.setVisibility(View.INVISIBLE);
+        join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                j1.setVisible(false);
+                j2.setVisible(false);
+                j3.setVisible(false);
+                i1.setVisible(true);
+                i2.setVisible(true);
+                i3.setVisible(true);
+            }
+        });
         mylocation = (Button) findViewById(R.id.my_loc);
         mylocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +187,8 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     @Override
     public void onPlaceSelected(Place place) {
         i++;
+        initiate.setVisibility(View.VISIBLE);
+        join.setVisibility(View.VISIBLE );
         Log.i(LOG_TAG, "Place Selected: " + place.getName());
         latLng = place.getLatLng();
         if (i>1){
@@ -319,10 +354,6 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     private static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
-
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    /*::  This function converts radians to decimal degrees             :*/
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
     }
