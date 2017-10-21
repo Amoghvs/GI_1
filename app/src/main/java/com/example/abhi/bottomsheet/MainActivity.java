@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(MainActivity.this, Carpool_act.class));
+                startActivity(new Intent(MainActivity.this, Recycler_act.class));
             }
         });
 

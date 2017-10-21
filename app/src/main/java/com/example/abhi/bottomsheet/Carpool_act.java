@@ -2,6 +2,7 @@ package com.example.abhi.bottomsheet;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -82,6 +83,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
     private static final String LOG_TAG = "PlaceSelectionListener";
 
+    float[] result = new float[10];
 
     AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
             .setCountry("IN")
@@ -98,6 +100,10 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     Marker marker,j1,j2,j3,i1,i2,i3;
     Button mylocation,join,initiate;
     char k,n;
+    String url;
+    Object dataTransfer[];
+    String duration,distance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,13 +232,15 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
         new_lat=latitude+val;
         new_lng=longitude+val;
-        calc_dist=distance(latitude,longitude,new_lat,new_lng,n);
+       // cal_dist(new_lat,new_lng);
+        Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
+       // calc_dist=distance(latitude,longitude,new_lat,new_lng,n);
 
         j1 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .infoWindowAnchor(0.5f, 0.5f)
                 .title("Akash")
-                .snippet(Double.toString(calc_dist)+" km away")
+                .snippet(distance+" km away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         ///mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
@@ -242,25 +250,29 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude+val;
-        calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
+       // cal_dist(new_lat,new_lng);
+       Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
+        // calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
 
         j2 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Abhinav")
-                .snippet(Double.toString(calc_dist)+" km away")
+                .snippet(distance +" kms away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude-val;
-        calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
+       // cal_dist(new_lat,new_lng);
+        Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
+        //calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
         j3 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Shivam")
-                .snippet(Double.toString(calc_dist)+" km away")
+                .snippet(distance+" kms away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         rando = r.nextInt(10 - 1) + 1;
@@ -272,7 +284,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Sasidhar")
-                .snippet(Double.toString(calc_dist)+" km away")
+                .snippet(distance+" km away")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
         rando = r.nextInt(10 - 1) + 1;
@@ -357,4 +369,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
     }
+
+
+
 }

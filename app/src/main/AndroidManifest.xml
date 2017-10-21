@@ -34,7 +34,10 @@
 
         <activity
             android:name=".Carpool_act"
-            android:label="@string/title_activity_carpool_act"></activity>
+            android:label="@string/title_activity_carpool_act" />
+        <activity
+            android:name=".Recycler_act"
+            android:label="@string/title_activity_recycler_act"></activity>
     </application>
 
 </manifest>

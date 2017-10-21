@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BottomSheet</string>
     <string name="title_activity_carpool_act">Map</string>
+    <string name="title_activity_recycler_act">Map</string>
 </resources>
