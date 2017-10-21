@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.abhi.bottomsheet.Carpool_act">
 
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -33,15 +34,29 @@
 
     </android.support.v7.widget.CardView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/duration"
+        android:textSize="20dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/distance"
+        android:layout_toRightOf="@+id/duration"
+        android:layout_marginStart="50dp"
+        android:textSize="20dp"
+        />
+
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/my_loc"
-        android:layout_marginBottom="172dp"
+        android:layout_marginBottom="13dp"
         android:background="@android:drawable/ic_menu_mylocation"
-        android:layout_marginRight="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/card_view" />
+        android:layout_above="@+id/initiateb"
+        android:layout_alignEnd="@+id/initiateb" />
 
     <Button
         android:layout_width="120dp"

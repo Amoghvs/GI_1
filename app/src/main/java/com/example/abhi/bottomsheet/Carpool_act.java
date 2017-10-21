@@ -1,25 +1,23 @@
 package com.example.abhi.bottomsheet;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
+
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
+
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.abhi.bottomsheet.POJO.*;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -44,25 +42,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Locale;
 import java.util.Random;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+
 
 public class Carpool_act extends FragmentActivity implements OnMapReadyCallback, PlaceSelectionListener {
 
@@ -101,15 +88,13 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
     private static final String LOG_TAG = "PlaceSelectionListener";
 
-    float[] result = new float[10];
-
     AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
             .setCountry("IN")
             .build();
     private GoogleMap mMap;
     GPSTracker gps;
     public double latitude,longitude,new_lat,new_lng,calc_dist;
-    public LatLng latLng;
+    public LatLng latLng,m_latlng;
     public  LatLng my_loc;
     public List<Address> addresses;
     public String address,city,state,country,knownName,postalCode;
@@ -118,11 +103,9 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     Marker marker,j1,j2,j3,i1,i2,i3;
     Button mylocation,join,initiate;
     char k,n;
-    String url;
-    Object dataTransfer[];
-    String duration,distance;
+    String distance,dista,time,ret_dis,ret_dur;
     Polyline line;
-
+    TextView dur,dis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,14 +116,14 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
+        dur = findViewById(R.id.duration);
+        dis = findViewById(R.id.distance);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(this);
         autocompleteFragment.setHint("Search your Destination");
         // autocompleteFragment.setBoundsBias(BOUNDS_MOUNTAIN_VIEW);
         autocompleteFragment.setFilter(typeFilter);
-
 
         initiate = (Button) findViewById(R.id.initiateb);
         initiate.setVisibility(View.INVISIBLE);
@@ -231,7 +214,6 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
             }
         }, 1000);
-        mMap.setTrafficEnabled(false);
         mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
 
         place_marker();
@@ -240,28 +222,23 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     private void place_marker() {
         j++;
         if (j>1){
-            j1.remove();
-            j2.remove();
-            j3.remove();
-            i1.remove();
-            i2.remove();
-            i3.remove();
+            remove_marker();
         }
+
         Random r = new Random();
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
 
         new_lat=latitude+val;
         new_lng=longitude+val;
-       // cal_dist(new_lat,new_lng);
-        Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
-       // calc_dist=distance(latitude,longitude,new_lat,new_lng,n);
+        ret_dis= dist_btw(new_lat,new_lng);
+        ret_dur= dur_btw(new_lat,new_lng);
 
         j1 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .infoWindowAnchor(0.5f, 0.5f)
                 .title("Akash")
-                .snippet(distance+" km away")
+                .snippet(ret_dis +"   "+ret_dur)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         ///mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
@@ -271,66 +248,68 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude+val;
-       // cal_dist(new_lat,new_lng);
-       Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
-        // calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
+        ret_dis= dist_btw(new_lat,new_lng);
+        ret_dur= dur_btw(new_lat,new_lng);
 
         j2 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Abhinav")
-                .snippet(distance +" kms away")
+                .snippet(ret_dis +"   "+ret_dur)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude-val;
-       // cal_dist(new_lat,new_lng);
-        Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
-        //calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
+        ret_dis= dist_btw(new_lat,new_lng);
+        ret_dur= dur_btw(new_lat,new_lng);
         j3 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Shivam")
-                .snippet(distance+" kms away")
+                .snippet(ret_dis +"   "+ret_dur)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
         new_lat=latitude+val;
         new_lng=longitude-val;
-        calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
+        ret_dis= dist_btw(new_lat,new_lng);
+        ret_dur= dur_btw(new_lat,new_lng);
         i1 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Sasidhar")
-                .snippet(distance+" km away")
+                .snippet(ret_dis +"   "+ret_dur)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude-val;
-        calc_dist=distance(latitude,longitude,new_lat,new_lng,n);
+        ret_dis= dist_btw(new_lat,new_lng);
+        ret_dur= dur_btw(new_lat,new_lng);
         i2 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Somanath")
-                .snippet(Double.toString(calc_dist)+" km away")
+                .snippet(ret_dis +"   "+ret_dur)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude+val;
-        calc_dist=distance(latitude,longitude,new_lat,new_lng,n);
+        ret_dis= dist_btw(new_lat,new_lng);
+        ret_dur= dur_btw(new_lat,new_lng);
         i3 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Mohit")
-                .snippet(Double.toString(calc_dist)+" km away")
+                .snippet(ret_dis +"   "+ret_dur)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+
 
 
 
@@ -364,31 +343,8 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(my_loc, 16));
             }
         }, 1000);
-        mMap.setTrafficEnabled(true);
+        mMap.setTrafficEnabled(false);
         mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
-    }
-
-
-    public static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        if (unit == 'k') {
-            dist = dist * 1.609344;
-        } else if (unit == 'n') {
-            dist = dist * 0.8684;
-        }
-        DecimalFormat df = new DecimalFormat("#.##");
-        dist = Double.valueOf(df.format(dist));
-        return (dist);
-    }
-    private static double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-    private static double rad2deg(double rad) {
-        return (rad * 180 / Math.PI);
     }
 
     private void build_retrofit_and_get_response(String type) {
@@ -417,6 +373,8 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                     for (int i = 0; i < response.body().getRoutes().size(); i++) {
                         String distance = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
                         String time = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
+                        dur.setText(time);
+                        dis.setText(distance);
                         //ShowDistanceDuration.setText("Distance:" + distance + ", Duration:" + time);
                         String encodedString = response.body().getRoutes().get(0).getOverviewPolyline().getPoints();
                         List<LatLng> list = decodePoly(encodedString);
@@ -474,6 +432,90 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         }
 
         return poly;
+    }
+
+    private String dist_btw(double m_lat, double m_lng) {
+
+        String url = "https://maps.googleapis.com/maps/";
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetrofitMaps service = retrofit.create(RetrofitMaps.class);
+
+        Call<Example> call = service.getDistanceDuration("metric", latitude + "," + longitude, m_lat + "," + m_lng, "driving");
+
+        call.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(Response<Example> response, Retrofit retrofit) {
+
+
+                // This loop will go through all the results and add marker on each location.
+                for (int i = 0; i < response.body().getRoutes().size(); i++) {
+                     dista = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
+
+                }
+            }
+
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d("onFailure", t.toString());
+            }
+        });
+
+        return dista;
+    }
+
+    private String dur_btw(double m_lat, double m_lng) {
+
+        String url = "https://maps.googleapis.com/maps/";
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetrofitMaps service = retrofit.create(RetrofitMaps.class);
+
+        Call<Example> call = service.getDistanceDuration("metric", latitude + "," + longitude, m_lat + "," + m_lng, "driving");
+
+        call.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(Response<Example> response, Retrofit retrofit) {
+
+
+                // This loop will go through all the results and add marker on each location.
+                for (int i = 0; i < response.body().getRoutes().size(); i++) {
+                     time = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
+
+                }
+            }
+
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d("onFailure", t.toString());
+            }
+        });
+
+        return time;
+    }
+
+    private void remove_marker(){
+        j1.remove();
+        j2.remove();
+        j3.remove();
+        i1.remove();
+        i2.remove();
+        i3.remove();
+    }
+
+    public static int getPixelsFromDp(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int)(dp * scale + 0.5f);
     }
 
 }
