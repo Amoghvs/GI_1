@@ -67,12 +67,12 @@
         android:text="Join a Carpool"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/card_view" />
-   <Button
-    android:layout_width="120dp"
-    android:layout_height="60dp"
-       android:id="@+id/initiateb"
-       android:text="Initiate a Carpool"
-       android:layout_alignBottom="@+id/joinb"
-       android:layout_alignEnd="@+id/card_view" />
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:id="@+id/initiateb"
+        android:text="Initiate a Carpool"
+        android:layout_alignBottom="@+id/joinb"
+        android:layout_alignEnd="@+id/card_view" />
 
 </RelativeLayout>

@@ -107,6 +107,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     Polyline line;
     TextView dur,dis;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,7 +181,9 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
             state = addresses.get(0).getAdminArea();
             country = addresses.get(0).getCountryName();
             postalCode = addresses.get(0).getPostalCode();
-            knownName = addresses.get(0).getFeatureName();
+           knownName = addresses.get(0).getFeatureName();
+            Toast.makeText(getApplicationContext(),address,Toast.LENGTH_SHORT).show();
+
 
             // \n is for new line
             // Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
@@ -343,7 +346,6 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(my_loc, 16));
             }
         }, 1000);
-        mMap.setTrafficEnabled(false);
         mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
     }
 
@@ -513,9 +515,5 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         i3.remove();
     }
 
-    public static int getPixelsFromDp(Context context, float dp) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int)(dp * scale + 0.5f);
-    }
 
 }
