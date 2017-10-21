@@ -56,6 +56,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
         private final View myContentsView;
+        public TextView tvTitle;
 
         MyInfoWindowAdapter(){
             myContentsView = getLayoutInflater().inflate(R.layout.info_win, null);
@@ -64,17 +65,10 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         @Override
         public View getInfoContents(Marker marker) {
 
-            TextView tvTitle = ((TextView)myContentsView.findViewById(R.id.title));
+            tvTitle= ((TextView)myContentsView.findViewById(R.id.title));
             tvTitle.setText(marker.getTitle());
             TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
             tvSnippet.setText(marker.getSnippet());
-            tvTitle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(),"hi",Toast.LENGTH_SHORT).show();
-                }
-            });
-
             return myContentsView;
         }
 
@@ -125,6 +119,8 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         autocompleteFragment.setHint("Search your Destination");
         // autocompleteFragment.setBoundsBias(BOUNDS_MOUNTAIN_VIEW);
         autocompleteFragment.setFilter(typeFilter);
+
+
 
         initiate = (Button) findViewById(R.id.initiateb);
         initiate.setVisibility(View.INVISIBLE);
