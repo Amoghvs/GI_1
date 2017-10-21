@@ -2,30 +2,42 @@ package com.example.abhi.bottomsheet;
 
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class Recycler_act extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     GPSTracker gps;
-    public double latitude,longitude;
-    public String address,city,state,country,knownName,postalCode;
+    public String address,city,state,country,knownName,postalCode,distance;
     public List<Address> addresses;
     LatLng myloc;
+    Button Rb;
+    int i=0,rando,j=0;
+    public double latitude,longitude,new_lat,new_lng,calc_dist,val;
+    public LatLng latLng;
+    Marker marker,j1,j2,j3,i1,i2,i3;
+    char k,n;
+    float[] result = new float[10];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +49,109 @@ public class Recycler_act extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
+        Rb = (Button) findViewById(R.id.recyb) ;
+        Rb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    j++;
+                    if (j>1){
+                        j1.remove();
+                        j2.remove();
+                        j3.remove();
+                        i1.remove();
+                        i2.remove();
+                        i3.remove();
+                    }
+                    Random r = new Random();
+                    rando = r.nextInt(10 - 1) + 1;
+                    val=rando*0.001;
+
+                    new_lat=latitude+val;
+                    new_lng=longitude+val;
+                    // cal_dist(new_lat,new_lng);
+                    Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
+                    // calc_dist=distance(latitude,longitude,new_lat,new_lng,n);
+
+                    j1 = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(new_lat, new_lng))
+                            .infoWindowAnchor(0.5f, 0.5f)
+                            .title("Akash")
+                            .snippet(distance+" km away")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                    ///mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
+
+
+                    rando = r.nextInt(10 - 1) + 1;
+                    val=rando*0.001;
+                    new_lat=latitude-val;
+                    new_lng=longitude+val;
+                    // cal_dist(new_lat,new_lng);
+                    Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
+                    // calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
+
+                    j2 = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(new_lat, new_lng))
+                            .anchor(0.5f, 0.5f)
+                            .title("Abhinav")
+                            .snippet(distance +" kms away")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+                    rando = r.nextInt(10 - 1) + 1;
+                    val=rando*0.001;
+                    new_lat=latitude-val;
+                    new_lng=longitude-val;
+                    // cal_dist(new_lat,new_lng);
+                    Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
+                    //calc_dist=distance(latitude,longitude,new_lat,new_lng,k);
+                    j3 = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(new_lat, new_lng))
+                            .anchor(0.5f, 0.5f)
+                            .title("Shivam")
+                            .snippet(distance+" kms away")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+                    rando = r.nextInt(10 - 1) + 1;
+                    val=rando*0.001;
+                    new_lat=latitude+val;
+                    new_lng=longitude-val;
+                    Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
+                    i1 = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(new_lat, new_lng))
+                            .anchor(0.5f, 0.5f)
+                            .title("Sasidhar")
+                            .snippet(distance+" km away")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+                    rando = r.nextInt(10 - 1) + 1;
+                    val=rando*0.001;
+                    new_lat=latitude-val;
+                    new_lng=longitude-val;
+                    Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
+                    i2 = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(new_lat, new_lng))
+                            .anchor(0.5f, 0.5f)
+                            .title("Somanath")
+                            .snippet(Double.toString(calc_dist)+" km away")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+                    rando = r.nextInt(10 - 1) + 1;
+                    val=rando*0.001;
+                    new_lat=latitude-val;
+                    new_lng=longitude+val;
+                    Location.distanceBetween(latitude,longitude,new_lat,new_lng,result);
+                    i3 = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(new_lat, new_lng))
+                            .anchor(0.5f, 0.5f)
+                            .title("Mohit")
+                            .snippet(Double.toString(calc_dist)+" km away")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+
+
+                }
+
+        });
 
         gps = new GPSTracker(Recycler_act.this);
 
