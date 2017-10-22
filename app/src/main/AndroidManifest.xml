@@ -48,10 +48,10 @@
         <activity android:name=".TransAct" />
         <activity android:name=".Details" />
 
-        <service android:name=".Battery" />
+        <service android:name=".EcoService.BatteryService" />
 
         <activity
-            android:name=".DialogAct"
+            android:name=".EcoService.DialogAct"
             android:theme="@style/Theme.YourCustomTransparentTheme">
         </activity>
     </application>

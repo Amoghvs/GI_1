@@ -1,35 +1,26 @@
-package com.example.abhi.bottomsheet;
+package com.example.abhi.bottomsheet.EcoService;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
  * Created by abhi on 22/10/17.
  */
 
-public class Battery extends Service {
-    public MediaPlayer mp;
+public class BatteryService extends Service {
 
     int k=0;
     private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
         @Override
         //When Event is published, onReceive method is called
         public void onReceive(Context c, Intent i) {
-            //Get Battery %
+            //Get BatteryService %
             int level = i.getIntExtra("level", 0);
             //Find the progressbar creating in main.xml
 
@@ -37,28 +28,12 @@ public class Battery extends Service {
             {
                 k=0;
             }
-            if (level<100)
-            if(k==0)
-            {
-
-                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-                mp = MediaPlayer.create(getApplicationContext(), notification);
-                 {
-                    mp.start();
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Do something after 100ms
-                            mp.stop();
-                        }
-                    }, 6000);
+            if (level==100)
+                if(k==0)
+                {
+                   k=1;
+                   startActivity(new Intent(BatteryService.this,DialogAct.class));
                 }
-                k=1;
-
-                startActivity(new Intent(Battery.this,DialogAct.class));
-
-            }
         }
 
     };

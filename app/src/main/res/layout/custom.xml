@@ -23,20 +23,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=" tap to end "
-        android:layout_marginTop="35dp"
         android:textColor="@color/colorPrimary"
         android:elevation="5dp"
-        android:layout_below="@id/progressBarCircle"
+        android:padding="15dp"
         android:background="@color/material_color_white"
-        />
+        android:layout_below="@+id/progressBarCircle"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="60dp" />
 
     <EditText
         android:id="@+id/editTextMinute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textViewTime"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="14dp"
         android:gravity="center"
         android:hint="min"
         android:inputType="number"
@@ -44,8 +43,10 @@
         android:maxLines="1"
         android:minEms="5"
         android:text="5"
-        android:textColor="@color/colorAccent"
-        android:textColorHint="@color/colorAccent" />
+        android:textColor="@color/material_color_green_400"
+        android:textColorHint="@color/colorAccent"
+        android:layout_above="@+id/textViewTime"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/textViewTime"
@@ -53,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="00:01:00"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/material_color_green_400"
         android:textSize="40sp" />
 
 

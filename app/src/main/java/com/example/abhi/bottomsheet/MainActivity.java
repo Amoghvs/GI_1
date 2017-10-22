@@ -22,6 +22,7 @@ import com.example.abhi.bottomsheet.Coupons.CouponsCardFragmentPagerAdapter;
 import com.example.abhi.bottomsheet.Coupons.CouponsCardItem;
 import com.example.abhi.bottomsheet.Coupons.CouponsCardPagerAdapter;
 import com.example.abhi.bottomsheet.Coupons.CouponsShadowTransformer;
+import com.example.abhi.bottomsheet.EcoService.BatteryService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         //services
 
         //battery
-        startService(new Intent(getBaseContext(), Battery.class));
+        startService(new Intent(getBaseContext(), BatteryService.class));
 
 
 

@@ -1,8 +1,12 @@
-package com.example.abhi.bottomsheet;
+package com.example.abhi.bottomsheet.EcoService;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -10,32 +14,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import java.util.concurrent.TimeUnit;
+import com.example.abhi.bottomsheet.R;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.concurrent.TimeUnit;
 
 public class DialogAct extends AppCompatActivity {
 
     private long timeCountInMilliSeconds = 5 * 60000;
+
+    public MediaPlayer mp;
+
 
     private enum TimerStatus {
         STARTED,
@@ -61,6 +49,20 @@ public class DialogAct extends AppCompatActivity {
 
         button = (Button) findViewById(R.id.buttonShowCustomDialog);
 
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        mp = MediaPlayer.create(getApplicationContext(), notification);
+        {
+            mp.start();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Do something after 100ms
+
+                }
+            }, timeCountInMilliSeconds);
+        }
+
         // add button listener
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -85,6 +87,7 @@ public class DialogAct extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                        mp.stop();
                         finish();
 
 
