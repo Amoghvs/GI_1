@@ -134,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //services
+
+        //battery
+        startService(new Intent(getBaseContext(), Battery.class));
+
 
 
 
@@ -150,5 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         return allItems;
     }
+
+
 
 }
