@@ -1,20 +1,27 @@
 package com.example.abhi.bottomsheet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.abhi.bottomsheet.BottomSheet.BottomSheetItemObject;
+import com.example.abhi.bottomsheet.BottomSheet.BottomSheetRecyclerViewAdapter;
+import com.example.abhi.bottomsheet.Coupons.CouponsCardFragmentPagerAdapter;
+import com.example.abhi.bottomsheet.Coupons.CouponsCardItem;
+import com.example.abhi.bottomsheet.Coupons.CouponsCardPagerAdapter;
+import com.example.abhi.bottomsheet.Coupons.CouponsShadowTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     BottomSheetBehavior mBottomSheetBehavior;
     TextView swipe;
     ImageView swipebut;
+    CardView maincard,quotecard,homecard,transcard;
 
     private Button mButton;
     private ViewPager mViewPager;
@@ -47,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         swipe =(TextView)findViewById(R.id.swipe);
+        maincard=(CardView)findViewById(R.id.maincard);
+        quotecard=(CardView)findViewById(R.id.quotecard);
+        homecard=(CardView)findViewById(R.id.homecard);
+        transcard=(CardView)findViewById(R.id.transcard);
+
 
         List<BottomSheetItemObject> rowListItem = getAllItemList();
         lLayout = new GridLayoutManager(MainActivity.this, 2);
@@ -88,6 +101,33 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(1);
         mCardShadowTransformer.enableScaling(true);
         mFragmentCardShadowTransformer.enableScaling(true);
+
+        //Main act cards onClick
+
+        maincard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,Details.class));
+            }
+        });
+        quotecard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,QuotesAct.class));
+            }
+        });
+        homecard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,HomeAccount.class));
+            }
+        });
+        transcard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,TransAct.class));
+            }
+        });
 
 
 

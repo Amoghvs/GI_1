@@ -34,20 +34,7 @@
 
     </android.support.v7.widget.CardView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/duration"
-        android:textSize="20dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/distance"
-        android:layout_toRightOf="@+id/duration"
-        android:layout_marginStart="50dp"
-        android:textSize="20dp"
-        />
+
 
     <Button
         android:layout_width="50dp"
@@ -55,26 +42,104 @@
         android:id="@+id/my_loc"
         android:layout_marginBottom="13dp"
         android:background="@android:drawable/ic_menu_mylocation"
-        android:layout_above="@+id/initiateb"
-        android:layout_alignEnd="@+id/initiateb" />
+        android:layout_above="@+id/li"
+        android:layout_alignEnd="@+id/li" />
 
-    <Button
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginBottom="14dp"
-        android:id="@+id/joinb"
-        android:text="Join a Carpool"
-        android:elevation="4dp"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/card_view" />
+        android:padding="10dp"
+        android:background="@color/colorPrimary"
+        android:id="@+id/li"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/duration"
+                android:textSize="20dp"
+                android:textColor="@color/material_color_white"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="mins ("
+                android:textSize="20dp"
+                android:textColor="@color/material_color_white"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/distance"
+                android:textSize="20dp"
+                android:textColor="@color/material_color_white"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kms)"
+                android:textColor="@color/material_color_white"
+                android:textSize="20dp"
+                android:layout_weight="1.9">
+            </TextView>
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/ic_nav"></ImageButton>
+
+        </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:weightSum="2">
     <Button
-        android:layout_width="120dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/joinb"
+        android:background="@color/cardview_light_background"
+        android:text="Join"
+        android:layout_margin="2dp"
+        android:textColor="@color/material_color_deep_purple_500"
+        android:elevation="9dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:id="@+id/initiateb"
-        android:text="Initiate a Carpool"
-        android:elevation="4dp"
-        android:layout_alignBottom="@+id/joinb"
-        android:layout_alignEnd="@+id/card_view" />
+        android:layout_margin="2dp"
+        android:textColor="@color/material_color_deep_purple_500"
+        android:background="@color/cardview_light_background"
+        android:text="Initiate"
+        android:elevation="9dp"
+
+        />
+    </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.example.abhi.bottomsheet;
+package com.example.abhi.bottomsheet.Coupons;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

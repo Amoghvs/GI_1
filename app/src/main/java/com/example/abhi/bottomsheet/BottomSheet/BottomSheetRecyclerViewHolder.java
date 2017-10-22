@@ -1,4 +1,4 @@
-package com.example.abhi.bottomsheet;
+package com.example.abhi.bottomsheet.BottomSheet;
 
 /**
  * Created by abhi on 21/10/17.
@@ -12,6 +12,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.abhi.bottomsheet.CarAct;
+import com.example.abhi.bottomsheet.Carpool_act;
+import com.example.abhi.bottomsheet.HomeAccount;
+import com.example.abhi.bottomsheet.R;
+import com.example.abhi.bottomsheet.Recycler_act;
 
 public class BottomSheetRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -39,6 +45,13 @@ public class BottomSheetRecyclerViewHolder extends RecyclerView.ViewHolder imple
             case 1 :
                 context.startActivity(new Intent(context,Recycler_act.class));
                 break;
+            case 3 :
+                context.startActivity(new Intent(context,HomeAccount.class));
+                break;
+            case 4 :
+                context.startActivity(new Intent(context,CarAct.class));
+                break;
+
 
         }
 

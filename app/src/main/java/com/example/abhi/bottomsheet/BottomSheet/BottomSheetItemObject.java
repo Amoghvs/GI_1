@@ -1,4 +1,4 @@
-package com.example.abhi.bottomsheet;
+package com.example.abhi.bottomsheet.BottomSheet;
 
 /**
  * Created by abhi on 21/10/17.
