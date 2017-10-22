@@ -3,6 +3,8 @@ package com.example.abhi.bottomsheet;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
@@ -52,10 +54,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return;
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        android.net.NetworkInfo wifi = cm
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        android.net.NetworkInfo datac = cm
+                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if ((wifi != null & datac != null)
+                && (wifi.isConnected() | datac.isConnected())) {
+            //connection is avlilable
+            //Toast.makeText(getApplicationContext(),"Available",Toast.LENGTH_SHORT).show();
+        }else{
+
+            Intent i = new Intent(MainActivity.this,ConnLost_act.class);
+            startActivity(i);
+            finish();
+            //no connection
+
         }
+
 
         swipe =(TextView)findViewById(R.id.swipe);
         maincard=(CardView)findViewById(R.id.maincard);

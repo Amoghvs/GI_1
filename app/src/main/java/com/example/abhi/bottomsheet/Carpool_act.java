@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Handler;
 
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,6 +101,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     String distance,dista,time,ret_dis,ret_dur;
     Polyline line;
     TextView dur,dis;
+    CardView cardView;
 
 
     @Override
@@ -111,6 +113,8 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        cardView = findViewById(R.id.li);
+        cardView.setVisibility(View.INVISIBLE);
         dur = findViewById(R.id.duration);
         dis = findViewById(R.id.distance);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
@@ -195,6 +199,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     @Override
     public void onPlaceSelected(Place place) {
         i++;
+        cardView.setVisibility(View.VISIBLE);
         initiate.setVisibility(View.VISIBLE);
         join.setVisibility(View.VISIBLE );
         Log.i(LOG_TAG, "Place Selected: " + place.getName());
