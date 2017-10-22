@@ -9,19 +9,22 @@
     <string name="country_name">Nigeria</string>
 
     <string-array name="examples">
-        <item>Anuj BC hai</item>
-        <item>Anuj loda hai</item>
-        <item>Anuj MC hai</item>
-        <item>Anuj chutiya hai</item>
-        <item>Anuj kutta hai</item>
+        <item>Save Earth</item>
+        <item>Save Electricity</item>
+        <item>Save fuel</item>
+        <item>Save Energy</item>
+        <item>Reduce carbon</item>
     </string-array>
 
-    <string name="title_1">Cool card</string>
-    <string name="title_2">Ok card</string>
-    <string name="title_3">Bad card</string>
-    <string name="title_4">Ugly card</string>
+    <string name="title_1">Mc.D card</string>
+    <string name="title_2">KFC card</string>
+    <string name="title_3">Amazon card</string>
+    <string name="title_4">Paytm card</string>
+    <string name="title_5">Google play card</string>
+    <string name="title_6">Foodpanda card</string>
 
-    <string name="text_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam eget ligula eu lectus lobortis condimentum.</string>
+
+    <string name="text_1">100 seeds</string>
 
 
 </resources>

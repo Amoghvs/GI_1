@@ -13,12 +13,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/material_color_green_400"
+        android:background="@color/separatorColor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="100dp"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
@@ -46,6 +47,8 @@
                         android:text="Hello"
                         android:textColor="@color/material_color_purple_500"
                         android:textSize="@dimen/material_typography_regular_title_text_size"
+
+
                         />
 
                     <TextView
@@ -273,33 +276,35 @@
 
             </android.support.v7.widget.CardView>
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_marginLeft="@dimen/material_card_edge_margin"
+                android:layout_marginRight="@dimen/material_card_edge_margin"
+                app:cardBackgroundColor="@color/material_color_green_500"
+                app:cardCornerRadius="@dimen/material_card_corner_radius"
+                app:cardElevation="@dimen/cardview_default_elevation"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="@dimen/material_card_actions_row_padding">
 
-                <Button
-                    android:id="@+id/cardTypeBtn"
-                    style="@style/ButtonStyle"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Fragments" />
+                    android:orientation="vertical">
 
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Scale" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Coupons"
+                        android:textStyle="bold"
+                        android:textColor="@color/material_color_white"
+                        android:layout_marginBottom="10dp"
+                        />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
-                android:layout_height="330dp"
+                android:layout_height="240dp"
                 android:layout_gravity="bottom"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
@@ -308,6 +313,11 @@
                 android:paddingLeft="60dp"
                 android:paddingRight="60dp"
                 android:paddingStart="60dp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
 
 
         </LinearLayout>
@@ -336,23 +346,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Swipe up"
+                    android:text="Explore"
                     android:padding="16dp"
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:id="@+id/swipe"
-                    android:textColor="@color/material_color_white"
+                    android:textColor="@color/material_color_grey_400"
                     android:textSize="@dimen/material_bottom_sheet_title_text_size"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/swipe"
-                    android:layout_centerInParent="true"
-                    android:src="@mipmap/ic_up"
-                    android:id="@+id/swipebut"
-
-                    />
 
             </RelativeLayout>
 

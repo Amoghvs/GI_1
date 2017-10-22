@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="15dp">
 
             <TextView
                 android:id="@+id/titleTextView"
@@ -29,15 +29,15 @@
                 android:id="@+id/contentTextView"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"/>
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"/>
 
             <Button
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Button" />
+                android:layout_marginTop="15dp"
+                android:text="Buy" />
         </LinearLayout>
 
         <ImageView

@@ -65,6 +65,7 @@
         android:layout_marginBottom="14dp"
         android:id="@+id/joinb"
         android:text="Join a Carpool"
+        android:elevation="4dp"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/card_view" />
     <Button
@@ -72,6 +73,7 @@
         android:layout_height="60dp"
         android:id="@+id/initiateb"
         android:text="Initiate a Carpool"
+        android:elevation="4dp"
         android:layout_alignBottom="@+id/joinb"
         android:layout_alignEnd="@+id/card_view" />
 

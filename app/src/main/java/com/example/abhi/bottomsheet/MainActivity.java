@@ -19,7 +19,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,CompoundButton.OnCheckedChangeListener{
+public class MainActivity extends AppCompatActivity {
     private GridLayoutManager lLayout;
 
     BottomSheetBehavior mBottomSheetBehavior;
@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         swipe =(TextView)findViewById(R.id.swipe);
-        swipebut =(ImageView)findViewById(R.id.swipebut);
 
         List<BottomSheetItemObject> rowListItem = getAllItemList();
         lLayout = new GridLayoutManager(MainActivity.this, 2);
@@ -67,15 +66,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //options for coupons
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mButton = (Button) findViewById(R.id.cardTypeBtn);
-        ((CheckBox) findViewById(R.id.checkBox)).setOnCheckedChangeListener(this);
-        mButton.setOnClickListener(this);
 
         mCardAdapter = new CouponsCardPagerAdapter();
         mCardAdapter.addCardItem(new CouponsCardItem(R.string.title_1, R.string.text_1));
         mCardAdapter.addCardItem(new CouponsCardItem(R.string.title_2, R.string.text_1));
         mCardAdapter.addCardItem(new CouponsCardItem(R.string.title_3, R.string.text_1));
         mCardAdapter.addCardItem(new CouponsCardItem(R.string.title_4, R.string.text_1));
+        mCardAdapter.addCardItem(new CouponsCardItem(R.string.title_5, R.string.text_1));
+        mCardAdapter.addCardItem(new CouponsCardItem(R.string.title_6, R.string.text_1));
         mFragmentCardAdapter = new CouponsCardFragmentPagerAdapter(getSupportFragmentManager(),
                 dpToPixels(2, this));
 
@@ -85,6 +83,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.setAdapter(mCardAdapter);
         mViewPager.setPageTransformer(false, mCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
+
+
+        mViewPager.setCurrentItem(1);
+        mCardShadowTransformer.enableScaling(true);
+        mFragmentCardShadowTransformer.enableScaling(true);
 
 
 
@@ -104,28 +107,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
-    public void onClick(View view) {
-        if (!mShowingFragments) {
-            mButton.setText("Views");
-            mViewPager.setAdapter(mFragmentCardAdapter);
-            mViewPager.setPageTransformer(false, mFragmentCardShadowTransformer);
-        } else {
-            mButton.setText("Fragments");
-            mViewPager.setAdapter(mCardAdapter);
-            mViewPager.setPageTransformer(false, mCardShadowTransformer);
-        }
-
-        mShowingFragments = !mShowingFragments;
-    }
 
     public static float dpToPixels(int dp, Context context) {
         return dp * (context.getResources().getDisplayMetrics().density);
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        mCardShadowTransformer.enableScaling(b);
-        mFragmentCardShadowTransformer.enableScaling(b);
-    }
 }
