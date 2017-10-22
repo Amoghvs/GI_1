@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,16 +19,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="80dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="80dp">
 
             <android.support.v7.widget.CardView
+                android:id="@+id/maincard"
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
-                android:layout_marginTop="13dp"
-                android:id="@+id/maincard"
                 android:layout_marginLeft="@dimen/material_card_edge_margin"
                 android:layout_marginRight="@dimen/material_card_edge_margin"
+                android:layout_marginTop="13dp"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/material_color_white"
                 app:cardCornerRadius="@dimen/material_card_corner_radius"
                 app:cardElevation="@dimen/cardview_default_elevation"
@@ -97,8 +98,8 @@
                         <TextView
                             android:id="@+id/txt_chance_rain"
                             android:layout_width="wrap_content"
-                            android:text="seeds"
                             android:layout_height="wrap_content"
+                            android:text="seeds"
                             android:textColor="@color/material_color_deep_purple_500"
                             android:textSize="@dimen/material_card_supporting_text_text_size"
                             />
@@ -118,13 +119,14 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/quotecard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_card_edge_margin"
                 android:layout_marginRight="@dimen/material_card_edge_margin"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/material_color_white"
                 app:cardCornerRadius="@dimen/material_card_corner_radius"
-                android:id="@+id/quotecard"
                 app:cardElevation="@dimen/cardview_default_elevation"
                 app:cardUseCompatPadding="true"
                 app:contentPadding="@dimen/material_card_actions_row_padding"
@@ -133,23 +135,24 @@
                     android:id="@+id/fadingTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/material_color_deep_purple_500"
                     android:gravity="center"
+                    android:textColor="@color/material_color_deep_purple_500"
                     android:textSize="15sp"
-                    app:timeout="2000"
-                    app:texts="@array/examples" />
+                    app:texts="@array/examples"
+                    app:timeout="2000" />
 
 
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/homecard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_card_edge_margin"
                 android:layout_marginRight="@dimen/material_card_edge_margin"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/material_color_white"
                 app:cardCornerRadius="@dimen/material_card_corner_radius"
-                android:id="@+id/homecard"
                 app:cardElevation="@dimen/cardview_default_elevation"
                 app:cardUseCompatPadding="true"
                 app:contentPadding="@dimen/material_card_actions_row_padding"
@@ -174,10 +177,10 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:textColor="@color/material_color_deep_purple_400"
                             android:layout_height="wrap_content"
-                            android:text="100 seeds"
                             android:layout_alignParentEnd="true"
+                            android:text="100 seeds"
+                            android:textColor="@color/material_color_deep_purple_400"
                             />
 
                     </RelativeLayout>
@@ -189,18 +192,18 @@
                         >
 
                         <TextView
+                            android:id="@+id/user1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="user1"
-                            android:id="@+id/user1"
                             android:textColor="@color/material_color_deep_purple_400"
                             />
                         <TextView
                             android:layout_width="wrap_content"
-                            android:textColor="@color/material_color_deep_purple_400"
                             android:layout_height="wrap_content"
-                            android:text="100"
                             android:layout_alignParentEnd="true"
+                            android:text="100"
+                            android:textColor="@color/material_color_deep_purple_400"
                             />
 
                     </RelativeLayout>
@@ -212,18 +215,18 @@
                         >
 
                         <TextView
+                            android:id="@+id/user2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="user2"
-                            android:id="@+id/user2"
                             android:textColor="@color/material_color_deep_purple_400"
                             />
                         <TextView
                             android:layout_width="wrap_content"
-                            android:textColor="@color/material_color_deep_purple_400"
                             android:layout_height="wrap_content"
-                            android:text="100"
                             android:layout_alignParentEnd="true"
+                            android:text="100"
+                            android:textColor="@color/material_color_deep_purple_400"
                             />
 
                     </RelativeLayout>
@@ -235,18 +238,18 @@
                         >
 
                         <TextView
+                            android:id="@+id/user3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="user3"
-                            android:id="@+id/user3"
                             android:textColor="@color/material_color_deep_purple_400"
                             />
                         <TextView
                             android:layout_width="wrap_content"
-                            android:textColor="@color/material_color_deep_purple_400"
                             android:layout_height="wrap_content"
-                            android:text="100"
                             android:layout_alignParentEnd="true"
+                            android:text="100"
+                            android:textColor="@color/material_color_deep_purple_400"
                             />
 
                     </RelativeLayout>
@@ -258,18 +261,18 @@
                         >
 
                         <TextView
+                            android:id="@+id/user4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="user4"
-                            android:id="@+id/user4"
                             android:textColor="@color/material_color_deep_purple_400"
                             />
                         <TextView
                             android:layout_width="wrap_content"
-                            android:textColor="@color/material_color_deep_purple_400"
                             android:layout_height="wrap_content"
-                            android:text="100"
                             android:layout_alignParentEnd="true"
+                            android:text="100"
+                            android:textColor="@color/material_color_deep_purple_400"
                             />
 
                     </RelativeLayout>
@@ -281,21 +284,22 @@
 
 
             <android.support.v7.widget.CardView
+                android:id="@+id/transcard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_card_edge_margin"
                 android:layout_marginRight="@dimen/material_card_edge_margin"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/material_color_white"
                 app:cardCornerRadius="@dimen/material_card_corner_radius"
                 app:cardElevation="@dimen/cardview_default_elevation"
                 app:cardUseCompatPadding="true"
-                android:id="@+id/transcard"
                 app:contentPadding="@dimen/material_card_actions_row_padding"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -307,9 +311,9 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
                         android:text="No transactions made"
-                        android:textColor="@color/material_color_deep_purple_500"
-                        android:layout_marginTop="5dp"/>
+                        android:textColor="@color/material_color_deep_purple_500"/>
 
                 </LinearLayout>
 
@@ -321,6 +325,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_card_edge_margin"
                 android:layout_marginRight="@dimen/material_card_edge_margin"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/material_color_green_500"
                 app:cardCornerRadius="@dimen/material_card_corner_radius"
                 app:cardElevation="@dimen/cardview_default_elevation"
@@ -335,10 +340,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Coupons"
-                        android:textStyle="bold"
-                        android:textColor="@color/material_color_white"
                         android:layout_marginBottom="10dp"
+                        android:text="Coupons"
+                        android:textColor="@color/material_color_white"
+                        android:textStyle="bold"
                         />
 
             <android.support.v4.view.ViewPager
@@ -368,9 +373,9 @@
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="470dp"
-        android:padding="@dimen/material_bottom_sheet_list_padding_horizontal"
-        android:elevation="@dimen/material_bottom_sheet_elevation"
         android:background="@drawable/rounded_corners"
+        android:elevation="@dimen/material_bottom_sheet_elevation"
+        android:padding="@dimen/material_bottom_sheet_list_padding_horizontal"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
         >
 
@@ -383,13 +388,13 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/swipe"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Explore"
-                    android:padding="16dp"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:id="@+id/swipe"
+                    android:padding="16dp"
+                    android:text="Explore"
                     android:textColor="@color/material_color_grey_400"
                     android:textSize="@dimen/material_bottom_sheet_title_text_size"/>
 
