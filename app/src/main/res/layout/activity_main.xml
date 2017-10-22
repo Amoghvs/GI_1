@@ -372,7 +372,7 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="470dp"
+        android:layout_height="465dp"
         android:background="@drawable/rounded_corners"
         android:elevation="@dimen/material_bottom_sheet_elevation"
         android:padding="@dimen/material_bottom_sheet_list_padding_horizontal"

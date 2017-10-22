@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         mBottomSheetBehavior.setPeekHeight(200);
 
 
+
         //options for coupons
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);

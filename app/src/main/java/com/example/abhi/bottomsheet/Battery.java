@@ -24,7 +24,7 @@ import android.widget.Toast;
 public class Battery extends Service {
     public MediaPlayer mp;
 
-int k=0,curr;
+    int k=0;
     private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
         @Override
         //When Event is published, onReceive method is called
@@ -33,10 +33,17 @@ int k=0,curr;
             int level = i.getIntExtra("level", 0);
             //Find the progressbar creating in main.xml
 
-            if (level%2==0){
+            if(level <= 30)
+            {
+                k=0;
+            }
+            if (level<100)
+            if(k==0)
+            {
+
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
                 mp = MediaPlayer.create(getApplicationContext(), notification);
-                if(k==0) {
+                 {
                     mp.start();
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -46,7 +53,10 @@ int k=0,curr;
                             mp.stop();
                         }
                     }, 6000);
-                }curr=level;
+                }
+                k=1;
+
+                startActivity(new Intent(Battery.this,DialogAct.class));
 
             }
         }
