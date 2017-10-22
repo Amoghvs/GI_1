@@ -3,11 +3,11 @@ package com.example.abhi.bottomsheet;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,14 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private GridLayoutManager lLayout;
-
     BottomSheetBehavior mBottomSheetBehavior;
     TextView swipe;
     ImageView swipebut;
     CardView maincard,quotecard,homecard,transcard;
-
-    private Button mButton;
+    private GridLayoutManager lLayout;
+    private Button buybut;
     private ViewPager mViewPager;
 
     private CouponsCardPagerAdapter mCardAdapter;
@@ -43,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
     private CouponsShadowTransformer mFragmentCardShadowTransformer;
 
     private boolean mShowingFragments = false;
+
+    public static float dpToPixels(int dp, Context context) {
+        return dp * (context.getResources().getDisplayMetrics().density);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         quotecard=(CardView)findViewById(R.id.quotecard);
         homecard=(CardView)findViewById(R.id.homecard);
         transcard=(CardView)findViewById(R.id.transcard);
+
+        buybut=(Button)findViewById(R.id.buybut) ;
 
 
         List<BottomSheetItemObject> rowListItem = getAllItemList();
@@ -131,8 +135,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    }
 
+
+    }
 
     private List<BottomSheetItemObject> getAllItemList(){
 
@@ -144,12 +149,6 @@ public class MainActivity extends AppCompatActivity {
         allItems.add(new BottomSheetItemObject("Vehicle", R.drawable.ic_audiotrack_dark));
 
         return allItems;
-    }
-
-
-
-    public static float dpToPixels(int dp, Context context) {
-        return dp * (context.getResources().getDisplayMetrics().density);
     }
 
 }

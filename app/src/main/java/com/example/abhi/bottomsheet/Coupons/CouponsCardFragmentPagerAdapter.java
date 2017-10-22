@@ -19,7 +19,7 @@ public class CouponsCardFragmentPagerAdapter extends FragmentStatePagerAdapter i
         mFragments = new ArrayList<>();
         mBaseElevation = baseElevation;
 
-        for(int i = 0; i< 7; i++){
+        for(int i = 0; i< 8; i++){
             addCardFragment(new CouponsCardFragment());
         }
 
