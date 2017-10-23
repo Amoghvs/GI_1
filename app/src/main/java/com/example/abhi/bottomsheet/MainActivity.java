@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private CouponsShadowTransformer mCardShadowTransformer;
     private CouponsCardFragmentPagerAdapter mFragmentCardAdapter;
     private CouponsShadowTransformer mFragmentCardShadowTransformer;
+    private static final int REQUEST_SELECT_PLACE = 1000;
+
 
     private boolean mShowingFragments = false;
 
@@ -53,6 +55,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.
+                checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         android.net.NetworkInfo wifi = cm
