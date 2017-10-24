@@ -1,11 +1,13 @@
 package com.example.abhi.bottomsheet;
 
+import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -36,7 +39,7 @@ public class Recycler_act extends FragmentActivity implements OnMapReadyCallback
     public double latitude,longitude,new_lat,new_lng,calc_dist,val;
     public LatLng latLng;
     Marker marker,j1,j2,j3,i1,i2,i3;
-    char k,n;
+    private static final String TAG = Recycler_act.class.getSimpleName();
     float[] result = new float[10];
 
     @Override
@@ -199,6 +202,19 @@ public class Recycler_act extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.style_json));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
         // Add a marker in Sydney and move the camera
         myloc = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(myloc).title(address).snippet(city +", "+state));

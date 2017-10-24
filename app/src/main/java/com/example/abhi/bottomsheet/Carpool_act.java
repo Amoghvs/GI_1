@@ -2,6 +2,7 @@ package com.example.abhi.bottomsheet;
 
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
@@ -21,6 +22,7 @@ import com.example.abhi.bottomsheet.POJO.*;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -100,6 +102,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     char k,n;
     String distance,dista,time,ret_dis,ret_dur;
     Polyline line;
+    private static final String TAG = Recycler_act.class.getSimpleName();
     TextView dur,dis;
     CardView cardView;
 
@@ -331,6 +334,20 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.style_json));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+
         mMap.getUiSettings().setAllGesturesEnabled(true);
         // Add a marker in Sydney and move the camera
         my_loc = new LatLng(latitude, longitude);
@@ -385,7 +402,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                                 .addAll(list)
                                 .width(15)
                                 //.color(Color)
-                                .color(Color.BLUE)
+                                .color(Color.CYAN)
                                 .geodesic(true)
                         );
                     }
