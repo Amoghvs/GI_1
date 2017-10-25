@@ -2,6 +2,7 @@ package com.example.abhi.bottomsheet;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
@@ -56,22 +57,28 @@ import java.util.Random;
 
 public class Carpool_act extends FragmentActivity implements OnMapReadyCallback, PlaceSelectionListener {
 
+    public View myContentsView;
+
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
-        private final View myContentsView;
         public TextView tvTitle;
 
-        MyInfoWindowAdapter(){
-            myContentsView = getLayoutInflater().inflate(R.layout.info_win, null);
-        }
+
 
         @Override
         public View getInfoContents(Marker marker) {
 
+            myContentsView= getLayoutInflater().inflate(R.layout.info_win, null);
+
+
             tvTitle= ((TextView)myContentsView.findViewById(R.id.title));
             tvTitle.setText(marker.getTitle());
-            TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
+            final TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
             tvSnippet.setText(marker.getSnippet());
+
+
+
+
             return myContentsView;
         }
 
@@ -126,6 +133,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         autocompleteFragment.setHint("Search your Destination");
         // autocompleteFragment.setBoundsBias(BOUNDS_MOUNTAIN_VIEW);
         autocompleteFragment.setFilter(typeFilter);
+
 
 
 

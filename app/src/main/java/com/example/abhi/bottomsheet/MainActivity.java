@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         View bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(200);
+        mBottomSheetBehavior.setPeekHeight(210);
 
 
 

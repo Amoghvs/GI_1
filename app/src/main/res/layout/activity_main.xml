@@ -326,7 +326,7 @@
                 android:layout_marginLeft="@dimen/material_card_edge_margin"
                 android:layout_marginRight="@dimen/material_card_edge_margin"
                 android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/material_color_green_500"
+                app:cardBackgroundColor="@color/material_color_white"
                 app:cardCornerRadius="@dimen/material_card_corner_radius"
                 app:cardElevation="@dimen/cardview_default_elevation"
                 app:cardUseCompatPadding="true"
@@ -342,7 +342,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:text="Coupons"
-                        android:textColor="@color/material_color_white"
+                        android:textColor="@color/material_color_deep_purple_500"
                         android:textStyle="bold"
                         />
 
@@ -372,10 +372,14 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="465dp"
+        android:layout_height="485dp"
+        android:alpha="0.98"
         android:background="@drawable/rounded_corners"
         android:elevation="@dimen/material_bottom_sheet_elevation"
-        android:padding="@dimen/material_bottom_sheet_list_padding_horizontal"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="5dp"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
         >
 
@@ -383,9 +387,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_expand_less_black_24dp"
+                />
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp">
 
                 <TextView
                     android:id="@+id/swipe"
@@ -393,10 +405,9 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:padding="16dp"
                     android:text="Explore"
-                    android:textColor="@color/material_color_grey_400"
-                    android:textSize="@dimen/material_bottom_sheet_title_text_size"/>
+                    android:textColor="@color/material_color_grey_600"
+                    android:textSize="12dp"/>
 
 
             </RelativeLayout>
