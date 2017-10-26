@@ -19,7 +19,7 @@ public class TransAct extends AppCompatActivity {
     private CustomCursorAdapter customAdapter;
     private PersonDatabaseHelper databaseHelper;
     private ListView listView;
-    public String currentDateTime;
+
     public String trans;
     private static final String TAG = TransAct.class.getSimpleName();
 
@@ -53,8 +53,7 @@ public class TransAct extends AppCompatActivity {
         });
 
 
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        currentDateTime = sdf1.format(new Date());
+
 
         trans="Some transaction";
 

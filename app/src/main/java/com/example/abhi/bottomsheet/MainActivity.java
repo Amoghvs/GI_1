@@ -2,6 +2,7 @@ package com.example.abhi.bottomsheet;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.abhi.bottomsheet.BottomSheet.BottomSheetItemObject;
 import com.example.abhi.bottomsheet.BottomSheet.BottomSheetRecyclerViewAdapter;
@@ -28,12 +30,14 @@ import com.example.abhi.bottomsheet.Coupons.CouponsShadowTransformer;
 import com.example.abhi.bottomsheet.DatabaseTransaction.PersonDatabaseHelper;
 import com.example.abhi.bottomsheet.EcoService.BatteryService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     BottomSheetBehavior mBottomSheetBehavior;
-    TextView swipe;
+    TextView swipe,txtname,txtseeds;
     ImageView swipebut;
     CardView maincard,quotecard,homecard,transcard;
     private GridLayoutManager lLayout;
@@ -50,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
     private CouponsShadowTransformer mFragmentCardShadowTransformer;
     private static final int REQUEST_SELECT_PLACE = 1000;
 
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
+    public static final String Seeds = "0";
+
+    public String name = "NULL";
+    public int seeds = 1000;
+
+    public String currentDateTime;
+
+    SharedPreferences sharedpreferences;
+
 
     private boolean mShowingFragments = false;
 
@@ -62,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //sharedpreferences
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        editor.putString(Name, "Abhishek");
+        editor.putInt(Seeds,1000);
+        editor.commit();
+
         if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.
                 checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -73,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Database
         databaseHelper = new PersonDatabaseHelper(this);
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        currentDateTime = sdf1.format(new Date());
+
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         android.net.NetworkInfo wifi = cm
@@ -104,6 +132,19 @@ public class MainActivity extends AppCompatActivity {
         toolbar= (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Project GI");
         setSupportActionBar(toolbar);
+
+        //Seeds and name
+        SharedPreferences settings = getSharedPreferences(MyPREFERENCES,
+                Context.MODE_PRIVATE);
+        name = settings.getString(Name,"name");
+        seeds = settings.getInt(Seeds, 0);
+
+        txtname =(TextView)findViewById(R.id.txt_name);
+        txtseeds =(TextView)findViewById(R.id.txt_seeds);
+
+
+        txtname.setText(name);
+        txtseeds.setText(String.valueOf(seeds));
 
 
         List<BottomSheetItemObject> rowListItem = getAllItemList();
@@ -139,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         mCardShadowTransformer = new CouponsShadowTransformer(mViewPager, mCardAdapter);
         mFragmentCardShadowTransformer = new CouponsShadowTransformer(mViewPager, mFragmentCardAdapter);
 
+
         mViewPager.setAdapter(mCardAdapter);
         mViewPager.setPageTransformer(false, mCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
@@ -148,13 +190,15 @@ public class MainActivity extends AppCompatActivity {
         mCardShadowTransformer.enableScaling(true);
         mFragmentCardShadowTransformer.enableScaling(true);
 
+
+
         //Main act cards onClick
 
         maincard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseHelper.insertData("asd","tht");
-                //startActivity(new Intent(MainActivity.this,Details.class));
+                //databaseHelper.insertData("asd","tht");
+                startActivity(new Intent(MainActivity.this,Details.class));
             }
         });
         quotecard.setOnClickListener(new View.OnClickListener() {
@@ -198,6 +242,27 @@ public class MainActivity extends AppCompatActivity {
         allItems.add(new BottomSheetItemObject("Vehicle", R.drawable.ic_audiotrack_dark));
 
         return allItems;
+    }
+
+    public void func(View view)
+    {
+        Toast.makeText(MainActivity.this,"You bought card",Toast.LENGTH_SHORT).show();
+        databaseHelper.insertData("Bought a card",currentDateTime);
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        editor.putString(Name, "Abhishek");
+        editor.putInt(Seeds,seeds-100);
+        editor.commit();
+
+        SharedPreferences settings = getSharedPreferences(MyPREFERENCES,
+                Context.MODE_PRIVATE);
+        name = settings.getString(Name,"name");
+        seeds = settings.getInt(Seeds, 0);
+
+        txtseeds.setText(String.valueOf(seeds));
+
+
     }
 
 
