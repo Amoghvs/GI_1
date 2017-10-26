@@ -24,6 +24,7 @@ import com.example.abhi.bottomsheet.Coupons.CouponsCardFragmentPagerAdapter;
 import com.example.abhi.bottomsheet.Coupons.CouponsCardItem;
 import com.example.abhi.bottomsheet.Coupons.CouponsCardPagerAdapter;
 import com.example.abhi.bottomsheet.Coupons.CouponsShadowTransformer;
+import com.example.abhi.bottomsheet.DatabaseTransaction.PersonDatabaseHelper;
 import com.example.abhi.bottomsheet.EcoService.BatteryService;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private GridLayoutManager lLayout;
     private Button buybut;
     private ViewPager mViewPager;
+
+    private PersonDatabaseHelper databaseHelper;
 
     private CouponsCardPagerAdapter mCardAdapter;
     private CouponsShadowTransformer mCardShadowTransformer;
@@ -65,10 +68,13 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        //Database
+        databaseHelper = new PersonDatabaseHelper(this);
+
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         android.net.NetworkInfo wifi = cm
                 .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        android.net.NetworkInfo datac = cm
+        final android.net.NetworkInfo datac = cm
                 .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         if ((wifi != null & datac != null)
                 && (wifi.isConnected() | datac.isConnected())) {
@@ -140,13 +146,15 @@ public class MainActivity extends AppCompatActivity {
         maincard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,Details.class));
+                databaseHelper.insertData("asd","tht");
+                //startActivity(new Intent(MainActivity.this,Details.class));
             }
         });
         quotecard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,QuotesAct.class));
+                databaseHelper.DatabaseDrop();
+                //startActivity(new Intent(MainActivity.this,QuotesAct.class));
             }
         });
         homecard.setOnClickListener(new View.OnClickListener() {

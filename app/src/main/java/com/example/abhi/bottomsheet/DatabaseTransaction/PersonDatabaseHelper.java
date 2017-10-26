@@ -49,6 +49,22 @@ public class PersonDatabaseHelper {
         database.insert(TABLE_NAME, null, contentValues);
     }
 
+    public void DatabaseDrop () {
+
+        String buildSQL = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+        database.execSQL(buildSQL);       // drop previous table
+
+        buildSQL = "CREATE TABLE " + TABLE_NAME + "( " + PERSON_TABLE_COLUMN_ID + " INTEGER PRIMARY KEY, " +
+                PERSON_TABLE_COLUMN_NAME + " TEXT, " + PERSON_TABLE_COLUMN_PIN + " TEXT )";
+
+        Log.d(TAG, "onCreate SQL: " + buildSQL);
+
+        database.execSQL(buildSQL);
+
+
+    }
+
     public Cursor getAllData () {
 
         String buildSQL = "SELECT * FROM " + TABLE_NAME;

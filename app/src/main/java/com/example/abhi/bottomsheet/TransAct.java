@@ -62,15 +62,11 @@ public class TransAct extends AppCompatActivity {
 
     }
 
-    public void onClickEnterData(View btnAdd) {
-
-        updateDatabase(trans,currentDateTime);
-
-    }
 
     public void updateDatabase(String t,String d) {
 
         databaseHelper.insertData(t,d);
+        setContentView(R.layout.activity_trans);
         customAdapter.changeCursor(databaseHelper.getAllData());
     }
 
