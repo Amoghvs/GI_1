@@ -236,10 +236,10 @@ public class MainActivity extends AppCompatActivity {
 
         List<BottomSheetItemObject> allItems = new ArrayList<BottomSheetItemObject>();
 
-        allItems.add(new BottomSheetItemObject("Carticipate", R.drawable.ic_audiotrack_dark));
-        allItems.add(new BottomSheetItemObject("Recyclers", R.drawable.ic_audiotrack_dark));
-        allItems.add(new BottomSheetItemObject("Home", R.drawable.ic_audiotrack_dark));
-        allItems.add(new BottomSheetItemObject("Vehicle", R.drawable.ic_audiotrack_dark));
+        allItems.add(new BottomSheetItemObject("Carticipate", R.drawable.ic_directions_car_black_24dp));
+        allItems.add(new BottomSheetItemObject("Recyclers", R.drawable.ic_sync_black_24dp));
+        allItems.add(new BottomSheetItemObject("Home", R.drawable.ic_home_black_24dp));
+        allItems.add(new BottomSheetItemObject("Vehicle", R.drawable.ic_airline_seat_recline_normal_black_24dp));
 
         return allItems;
     }
