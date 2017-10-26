@@ -53,8 +53,9 @@
 
         <activity
             android:name=".EcoService.DialogAct"
-            android:theme="@style/Theme.YourCustomTransparentTheme"></activity>
-        <activity android:name=".ConnLost_act"></activity>
+            android:theme="@style/Theme.YourCustomTransparentTheme" />
+        <activity android:name=".ConnLost_act" />
+        <activity android:name=".Chat_act"></activity>
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.location.Address;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.abhi.bottomsheet.POJO.*;
@@ -97,7 +99,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
             .build();
     private GoogleMap mMap;
     GPSTracker gps;
-    public double latitude,longitude,new_lat,new_lng,calc_dist;
+    public double latitude,longitude,new_lat,new_lng;
     public LatLng latLng,m_latlng;
     public  LatLng my_loc;
     public List<Address> addresses;
@@ -106,11 +108,11 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     public double val;
     Marker marker,j1,j2,j3,i1,i2,i3;
     Button mylocation,join,initiate;
-    char k,n;
-    String distance,dista,time,ret_dis,ret_dur;
+    String ret_dis="",ret_dur="";
     Polyline line;
     private static final String TAG = Recycler_act.class.getSimpleName();
     TextView dur,dis;
+    ImageButton navigation;
     CardView cardView;
 
 
@@ -127,6 +129,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         cardView.setVisibility(View.INVISIBLE);
         dur = findViewById(R.id.duration);
         dis = findViewById(R.id.distance);
+        navigation=findViewById(R.id.nav);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(this);
@@ -137,11 +140,13 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
 
 
-        initiate = (Button) findViewById(R.id.initiateb);
+
+        initiate = findViewById(R.id.initiateb);
         initiate.setVisibility(View.INVISIBLE);
         initiate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                place_marker();
                 i1.setVisible(false);
                 i2.setVisible(false);
                 i3.setVisible(false);
@@ -155,12 +160,21 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                place_marker();
                 j1.setVisible(false);
                 j2.setVisible(false);
                 j3.setVisible(false);
                 i1.setVisible(true);
                 i2.setVisible(true);
                 i3.setVisible(true);
+            }
+        });
+        navigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?daddr=" + new_lat + "," + new_lng));
+                startActivity(intent);
             }
         });
         mylocation = (Button) findViewById(R.id.my_loc);
@@ -217,8 +231,9 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         latLng = place.getLatLng();
         if (i>1){
             marker.remove();
+            remove_marker();
         }
-        build_retrofit_and_get_response("driving",0.0,0.0);
+        build_retrofit_and_get_response("driving");
         marker= mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .title(knownName + address)
                 .snippet(city +", "+state));
@@ -226,12 +241,12 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
             }
         }, 1000);
         mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
 
-        place_marker();
+
     }
 
     private void place_marker() {
@@ -246,13 +261,12 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
         new_lat=latitude+val;
         new_lng=longitude+val;
-        build_retrofit_and_get_response("driving",new_lat,new_lng);
 
         j1 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .infoWindowAnchor(0.5f, 0.5f)
                 .title("Akash")
-                .snippet(ret_dis +"   "+ret_dur)
+                .snippet("Maruti WagonR")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         ///mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
@@ -262,61 +276,58 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude+val;
-        build_retrofit_and_get_response("driving",new_lat,new_lng);
+
 
         j2 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Abhinav")
-                .snippet(ret_dis +"   "+ret_dur)
+                .snippet("Hyundai Creta")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude-val;
-        build_retrofit_and_get_response("driving",new_lat,new_lng);
         j3 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Shivam")
-                .snippet(ret_dis +"   "+ret_dur)
+                .snippet("Ford Figo")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
         new_lat=latitude+val;
         new_lng=longitude-val;
-        build_retrofit_and_get_response("driving",new_lat,new_lng);
         i1 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Sasidhar")
-                .snippet(ret_dis +"   "+ret_dur)
+                .snippet("Honda City")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude-val;
-        build_retrofit_and_get_response("driving",new_lat,new_lng);
         i2 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Somanath")
-                .snippet(ret_dis +"   "+ret_dur)
+                .snippet("Maruti Baleno")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude+val;
-        build_retrofit_and_get_response("driving",new_lat,new_lng);
+        build_retrofit_and_get_response("driving");
         i3 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Mohit")
-                .snippet(ret_dis +"   "+ret_dur)
+                .snippet("5 km away ")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
 
@@ -369,10 +380,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
     }
 
-    private void build_retrofit_and_get_response(String type,double lat_d, double lng_d) {
-
-        Double d_lat = lat_d;
-        Double d_lng = lng_d;
+    private void build_retrofit_and_get_response(String type) {
 
         String url = "https://maps.googleapis.com/maps/";
 
@@ -384,7 +392,6 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         RetrofitMaps service = retrofit.create(RetrofitMaps.class);
 
         Call<Example> call = service.getDistanceDuration("metric", latitude + "," + longitude,latLng.latitude + "," + latLng.longitude, type);
-        Call<Example> d_call = service.getDistanceDuration("metric", latitude + "," + longitude,d_lat + "," + d_lng, type);
 
         call.enqueue(new Callback<Example>() {
             @Override
@@ -397,48 +404,14 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                     }
                     // This loop will go through all the results and add marker on each location.
                     for (int i = 0; i < response.body().getRoutes().size(); i++) {
-                        String distance = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
-                        String time = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
-                        dur.setText(time);
-                        dis.setText(distance);
+                       ret_dis = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
+                        ret_dur = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
+                        dur.setText(ret_dis);
+                        dis.setText(ret_dur);
+                        //ret_dis = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
+                        //ret_dur = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
 
-                        //ShowDistanceDuration.setText("Distance:" + distance + ", Duration:" + time);
-                        String encodedString = response.body().getRoutes().get(0).getOverviewPolyline().getPoints();
-                        List<LatLng> list = decodePoly(encodedString);
-                        line = mMap.addPolyline(new PolylineOptions()
-                                .addAll(list)
-                                .width(15)
-                                //.color(Color)
-                                .color(Color.CYAN)
-                                .geodesic(true)
-                        );
-                    }
-                } catch (Exception e) {
-                    Log.d("onResponse", "There is an error");
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d("onFailure", t.toString());
-            }
-        });
-
-        d_call.enqueue(new Callback<Example>() {
-            @Override
-            public void onResponse(Response<Example> response, Retrofit retrofit) {
-                try {
-                    //Remove previous line from map
-                    if (line != null) {
-                        line.remove();
-                    }
-                    // This loop will go through all the results and add marker on each location.
-                    for (int i = 0; i < response.body().getRoutes().size(); i++) {
-                        String rdistance = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
-                        String rtime = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
-                        ret_dur = rtime;
-                        ret_dis = rdistance;
 
                         //ShowDistanceDuration.setText("Distance:" + distance + ", Duration:" + time);
                         String encodedString = response.body().getRoutes().get(0).getOverviewPolyline().getPoints();
@@ -499,75 +472,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         return poly;
     }
 
-    /*private String dist_btw(double m_lat, double m_lng) {
 
-        String url = "https://maps.googleapis.com/maps/";
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitMaps service = retrofit.create(RetrofitMaps.class);
-
-        Call<Example> call = service.getDistanceDuration("metric", latitude + "," + longitude, m_lat + "," + m_lng, "driving");
-
-        call.enqueue(new Callback<Example>() {
-            @Override
-            public void onResponse(Response<Example> response, Retrofit retrofit) {
-
-
-                // This loop will go through all the results and add marker on each location.
-                for (int i = 0; i < response.body().getRoutes().size(); i++) {
-                     dista = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
-
-                }
-            }
-
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d("onFailure", t.toString());
-            }
-        });
-
-        return dista;
-    }
-
-    private String dur_btw(double m_lat, double m_lng) {
-
-        String url = "https://maps.googleapis.com/maps/";
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitMaps service = retrofit.create(RetrofitMaps.class);
-
-        Call<Example> call = service.getDistanceDuration("metric", latitude + "," + longitude, m_lat + "," + m_lng, "driving");
-
-        call.enqueue(new Callback<Example>() {
-            @Override
-            public void onResponse(Response<Example> response, Retrofit retrofit) {
-
-
-                // This loop will go through all the results and add marker on each location.
-                for (int i = 0; i < response.body().getRoutes().size(); i++) {
-                     time = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
-
-                }
-            }
-
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d("onFailure", t.toString());
-            }
-        });
-
-        return time;
-    } */
 
     private void remove_marker(){
         j1.remove();

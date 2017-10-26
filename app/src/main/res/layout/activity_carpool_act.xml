@@ -103,6 +103,7 @@
             <ImageButton
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:id="@+id/nav"
                 android:src="@mipmap/ic_nav"></ImageButton>
 
         </LinearLayout>
