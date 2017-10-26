@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,6 +14,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.abhi.bottomsheet.Recycler_act" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:alpha="0.98"
+        android:background="@drawable/rounded_corners"
+        android:elevation="@dimen/material_bottom_sheet_elevation"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:paddingBottom="16dp"
+        android:visibility="invisible"
+        android:paddingTop="5dp"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo"
+                android:id="@+id/photo"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="what is the fuck"
+                android:textSize="20dp"
+                android:textColor="@color/material_color_white"
+                android:layout_marginStart="20dp"
+                android:layout_toRightOf="@id/photo"
+                />
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
     <Button
         android:layout_width="120dp"
         android:layout_height="60dp"
@@ -21,7 +62,7 @@
         android:text="Recyler"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="21dp" />
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="15dp" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

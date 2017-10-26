@@ -51,8 +51,11 @@ public class Recycler_act extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        final View bottomSheet = findViewById( R.id.bottom_sheet );
 
-        Rb = (Button) findViewById(R.id.recyb) ;
+
+
+        Rb = findViewById(R.id.recyb) ;
         Rb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +86,20 @@ public class Recycler_act extends FragmentActivity implements OnMapReadyCallback
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                     ///mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        if (marker.getTitle().contains("Akash")){
+                            bottomSheet.setVisibility(View.VISIBLE);
+                            Toast.makeText(getApplicationContext(),"Hello AK",Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        if (marker.getTitle().contains("Abhinav")){
+                            bottomSheet.setVisibility(View.VISIBLE);
+                            Toast.makeText(getApplicationContext(),"Hello Abhinav",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
 
                     rando = r.nextInt(10 - 1) + 1;

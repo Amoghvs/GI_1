@@ -218,7 +218,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         if (i>1){
             marker.remove();
         }
-        build_retrofit_and_get_response("driving");
+        build_retrofit_and_get_response("driving",0.0,0.0);
         marker= mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .title(knownName + address)
                 .snippet(city +", "+state));
@@ -246,8 +246,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
         new_lat=latitude+val;
         new_lng=longitude+val;
-        ret_dis= dist_btw(new_lat,new_lng);
-        ret_dur= dur_btw(new_lat,new_lng);
+        build_retrofit_and_get_response("driving",new_lat,new_lng);
 
         j1 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
@@ -263,8 +262,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude+val;
-        ret_dis= dist_btw(new_lat,new_lng);
-        ret_dur= dur_btw(new_lat,new_lng);
+        build_retrofit_and_get_response("driving",new_lat,new_lng);
 
         j2 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
@@ -277,8 +275,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude-val;
-        ret_dis= dist_btw(new_lat,new_lng);
-        ret_dur= dur_btw(new_lat,new_lng);
+        build_retrofit_and_get_response("driving",new_lat,new_lng);
         j3 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
@@ -290,8 +287,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         val=rando*0.001;
         new_lat=latitude+val;
         new_lng=longitude-val;
-        ret_dis= dist_btw(new_lat,new_lng);
-        ret_dur= dur_btw(new_lat,new_lng);
+        build_retrofit_and_get_response("driving",new_lat,new_lng);
         i1 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
@@ -303,8 +299,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude-val;
-        ret_dis= dist_btw(new_lat,new_lng);
-        ret_dur= dur_btw(new_lat,new_lng);
+        build_retrofit_and_get_response("driving",new_lat,new_lng);
         i2 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
@@ -316,8 +311,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         val=rando*0.001;
         new_lat=latitude-val;
         new_lng=longitude+val;
-        ret_dis= dist_btw(new_lat,new_lng);
-        ret_dur= dur_btw(new_lat,new_lng);
+        build_retrofit_and_get_response("driving",new_lat,new_lng);
         i3 = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
@@ -375,7 +369,10 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
     }
 
-    private void build_retrofit_and_get_response(String type) {
+    private void build_retrofit_and_get_response(String type,double lat_d, double lng_d) {
+
+        Double d_lat = lat_d;
+        Double d_lng = lng_d;
 
         String url = "https://maps.googleapis.com/maps/";
 
@@ -387,6 +384,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         RetrofitMaps service = retrofit.create(RetrofitMaps.class);
 
         Call<Example> call = service.getDistanceDuration("metric", latitude + "," + longitude,latLng.latitude + "," + latLng.longitude, type);
+        Call<Example> d_call = service.getDistanceDuration("metric", latitude + "," + longitude,d_lat + "," + d_lng, type);
 
         call.enqueue(new Callback<Example>() {
             @Override
@@ -403,6 +401,45 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                         String time = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
                         dur.setText(time);
                         dis.setText(distance);
+
+                        //ShowDistanceDuration.setText("Distance:" + distance + ", Duration:" + time);
+                        String encodedString = response.body().getRoutes().get(0).getOverviewPolyline().getPoints();
+                        List<LatLng> list = decodePoly(encodedString);
+                        line = mMap.addPolyline(new PolylineOptions()
+                                .addAll(list)
+                                .width(15)
+                                //.color(Color)
+                                .color(Color.CYAN)
+                                .geodesic(true)
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.d("onResponse", "There is an error");
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d("onFailure", t.toString());
+            }
+        });
+
+        d_call.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(Response<Example> response, Retrofit retrofit) {
+                try {
+                    //Remove previous line from map
+                    if (line != null) {
+                        line.remove();
+                    }
+                    // This loop will go through all the results and add marker on each location.
+                    for (int i = 0; i < response.body().getRoutes().size(); i++) {
+                        String rdistance = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
+                        String rtime = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
+                        ret_dur = rtime;
+                        ret_dis = rdistance;
+
                         //ShowDistanceDuration.setText("Distance:" + distance + ", Duration:" + time);
                         String encodedString = response.body().getRoutes().get(0).getOverviewPolyline().getPoints();
                         List<LatLng> list = decodePoly(encodedString);
@@ -462,7 +499,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         return poly;
     }
 
-    private String dist_btw(double m_lat, double m_lng) {
+    /*private String dist_btw(double m_lat, double m_lng) {
 
         String url = "https://maps.googleapis.com/maps/";
 
@@ -530,7 +567,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         });
 
         return time;
-    }
+    } */
 
     private void remove_marker(){
         j1.remove();
