@@ -44,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/material_color_white"
                 android:layout_marginTop="15dp"
+                android:onClick="func"
                 android:textColor="@color/material_color_deep_purple_400"
                 android:text="Buy" />
         </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.abhi.bottomsheet.Coupons;
 
 
 import android.support.v7.widget.CardView;
+import android.view.View;
 
 public interface CouponsCardAdapter {
 
@@ -12,4 +13,6 @@ public interface CouponsCardAdapter {
     CardView getCardViewAt(int position);
 
     int getCount();
+
+
 }
