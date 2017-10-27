@@ -119,7 +119,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     private GoogleMap mMap;
     GPSTracker gps;
     public double latitude, longitude, new_lat, new_lng;
-    public LatLng latLng, m_latlng;
+    public LatLng latLng;
     public LatLng my_loc;
     public List<Address> addresses;
     public String address, city, state, country, knownName, postalCode;

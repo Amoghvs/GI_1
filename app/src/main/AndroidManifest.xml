@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Login_act"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,6 +62,9 @@
         <service android:name=".ServiceIoT" />
         <service android:name=".ServiceChat" />
         <activity android:name=".Ride_act" />
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".RegisterActivity"
+            android:theme="@style/Translucent" />
     </application>
 
 </manifest>
