@@ -63,5 +63,6 @@ dependencies {
     compile 'com.tomer:fadingtextview:2.0'
     compile 'blue.aodev:material-values:1.1.1'
     compile 'com.github.jetradarmobile.desertplaceholder:desertplaceholder:1.2.4'
+    compile 'com.journeyapps:zxing-android-embedded:3.4.0'
     testCompile 'junit:junit:4.12'
 }
