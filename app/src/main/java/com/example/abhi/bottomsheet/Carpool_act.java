@@ -198,6 +198,14 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
             }
         });
 
+        msg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent j = new Intent(Carpool_act.this,Chat_act.class);
+                startActivity(j);
+            }
+        });
+
 
         String clientId = MqttClient.generateClientId();
         client = new MqttAndroidClient(this.getApplicationContext(), host, clientId);
@@ -352,7 +360,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
             }
         }, 1000);
         mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
