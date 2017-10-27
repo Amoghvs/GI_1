@@ -1,18 +1,29 @@
 package com.example.abhi.bottomsheet;
 
 
-import android.content.Context;
-import android.content.Intent;
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttSecurityException;import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Handler;
 
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +32,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.abhi.bottomsheet.POJO.*;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -39,6 +51,7 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
@@ -66,19 +79,16 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         public TextView tvTitle;
 
 
-
         @Override
         public View getInfoContents(Marker marker) {
 
-            myContentsView= getLayoutInflater().inflate(R.layout.info_win, null);
+            myContentsView = getLayoutInflater().inflate(R.layout.info_win, null);
 
 
-            tvTitle= ((TextView)myContentsView.findViewById(R.id.title));
+            tvTitle = ((TextView) myContentsView.findViewById(R.id.title));
             tvTitle.setText(marker.getTitle());
-            final TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
+            final TextView tvSnippet = ((TextView) myContentsView.findViewById(R.id.snippet));
             tvSnippet.setText(marker.getSnippet());
-
-
 
 
             return myContentsView;
@@ -99,21 +109,33 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
             .build();
     private GoogleMap mMap;
     GPSTracker gps;
-    public double latitude,longitude,new_lat,new_lng;
-    public LatLng latLng,m_latlng;
-    public  LatLng my_loc;
+    public double latitude, longitude, new_lat, new_lng;
+    public LatLng latLng, m_latlng;
+    public LatLng my_loc;
     public List<Address> addresses;
-    public String address,city,state,country,knownName,postalCode;
-    int i=0,rando,j=0;
+    public String address, city, state, country, knownName, postalCode;
+    int i = 0, rando, j = 0;
     public double val;
-    Marker marker,j1,j2,j3,i1,i2,i3;
-    Button mylocation,join,initiate;
-    String ret_dis="",ret_dur="";
+    Marker marker, j1, j2, j3, i1, i2, i3;
+    Button mylocation, join, initiate, call, msg, req;
+    String ret_dis = "", ret_dur = "";
     Polyline line;
     private static final String TAG = Recycler_act.class.getSimpleName();
-    TextView dur,dis;
-    ImageButton navigation;
+    TextView dur, dis, disdur;
+    Button navigation;
     CardView cardView;
+    public String phnum, mhint, rhint,title;
+
+    String host = "tcp://m11.cloudmqtt.com:16201";
+    // String clientId = "ExampleAndroidClient";
+    String topic = "sensor/snd";
+
+    String username = "rcduaeoh";
+    String password = "hm3O7P_0KiXi";
+
+    MqttAndroidClient client;
+    IMqttToken token = null;
+    MqttConnectOptions options;
 
 
     @Override
@@ -129,7 +151,14 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         cardView.setVisibility(View.INVISIBLE);
         dur = findViewById(R.id.duration);
         dis = findViewById(R.id.distance);
-        navigation=findViewById(R.id.nav);
+        navigation = findViewById(R.id.nav);
+        call = findViewById(R.id.call);
+        msg = findViewById(R.id.msg);
+        req = findViewById(R.id.request);
+
+        call.setVisibility(View.GONE);
+        msg.setVisibility(View.GONE);
+        req.setVisibility(View.GONE);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(this);
@@ -138,7 +167,89 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         autocompleteFragment.setFilter(typeFilter);
 
 
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phnum));
+                if (ActivityCompat.checkSelfPermission(Carpool_act.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                Toast.makeText(getApplicationContext(),"Calling "+title,Toast.LENGTH_SHORT).show();
+                startActivity(i);
 
+            }
+        });
+
+        req.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    client.publish(topic, rhint.getBytes(),0,false);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+        String clientId = MqttClient.generateClientId();
+        client = new MqttAndroidClient(this.getApplicationContext(), host, clientId);
+
+        options = new MqttConnectOptions();
+        options.setUserName(username);
+        options.setPassword(password.toCharArray());
+
+        try {
+            token = client.connect(options);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            token = client.connect(options);
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    // We are connected
+                    Toast.makeText(getApplicationContext(),"Connection successful",Toast.LENGTH_SHORT).show();
+                    subscribtion();
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    // Something went wrong e.g. connection timeout or firewall problems
+                    Toast.makeText(getApplicationContext(),"Connection failed",Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        client.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                //textView.setText(new String(message.getPayload()));
+
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
 
 
         initiate = findViewById(R.id.initiateb);
@@ -255,6 +366,10 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
             remove_marker();
         }
 
+        call.setVisibility(View.VISIBLE);
+        msg.setVisibility(View.VISIBLE);
+        req.setVisibility(View.VISIBLE);
+
         Random r = new Random();
         rando = r.nextInt(10 - 1) + 1;
         val=rando*0.001;
@@ -327,12 +442,47 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                 .position(new LatLng(new_lat, new_lng))
                 .anchor(0.5f, 0.5f)
                 .title("Mohit")
-                .snippet("5 km away ")
+                .snippet("Toyota Etios ")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                title =marker.getTitle();
+                if (title.contains("Akash")){
+                        phnum = "9999847434";
+                        mhint = "mhint";
+                        rhint = "rhint";
+                }
+                else if (title.contains("Abhinav")){
+                        phnum= "9742706888";
+                    mhint = "mhint";
+                    rhint = "rhint";
 
+                }
+                else if (title.contains("Shivam")){
+                        phnum = "9008944908";
+                    mhint = "mhint";
+                    rhint = "rhint";
+                }
+                else if (title.contains("Sasidhar")){
+                        phnum = "9643997845";
+                    mhint = "mhint";
+                    rhint = "rhint";
 
-
+                }
+                else if (title.contains("Somanath")){
+                        phnum = "9008087755";
+                    mhint = "mhint";
+                    rhint = "rhint";
+                }
+                else {
+                    phnum = "7259603949";
+                    mhint = "mhint";
+                    rhint = "rhint";
+                }
+            }
+        });
     }
 
     @Override
@@ -483,5 +633,14 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         i3.remove();
     }
 
+    private void subscribtion(){
+        try {
+            client.subscribe(topic,0);
+        } catch (MqttSecurityException e) {
+            e.printStackTrace();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
