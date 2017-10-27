@@ -1,6 +1,7 @@
 package com.example.abhi.bottomsheet;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     CardView maincard,quotecard,homecard,transcard;
     private GridLayoutManager lLayout;
     private Button buybut;
-    ImageView qrcsn;
+    ImageView qrcsn,pay;
     private ViewPager mViewPager;
     private IntentIntegrator qrScan;
 
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public String named="";
-    public int seeds = 0;
+    public int seeds = 0,amount=0;
 
     public String currentDateTime;
     public  TextView homestat;
@@ -237,9 +239,18 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(getBaseContext(),ServiceIoT.class));
         startService(new Intent(getBaseContext(),ServiceChat.class));
 
+        pay = (ImageView) findViewById(R.id.payment);
+        qrScan = new IntentIntegrator(this);
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                qrScan.initiateScan();
+            }
+        });
+
+
         qrcsn = (ImageView) findViewById(R.id.qr);
         qrScan = new IntentIntegrator(this);
-
         qrcsn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -325,9 +336,49 @@ public class MainActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(),obj.getString("address"),Toast.LENGTH_SHORT).show();
                     //   /textViewAddress.setText(obj.getString("address"));
 
-                    if (obj.getString("name").equals("Namespace")){
+                    if (obj.getString("name").equals("Namespace")) {
                         homestat.setText("Connected to Home");
                     }
+                    else if (obj.getString("name").equals("Abhishek")){
+                        String amt = obj.getString("amount");
+                        amount = Integer.parseInt(amt);
+
+
+
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle("Payment Confirmation");
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage("Confirm your payment with Abhishek of "+ amt);
+
+                        // Setting Icon to Dialog
+                       // alertDialog.setIcon(R.drawable.delete);
+
+                        // Setting Positive "Yes" Button
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int which) {
+
+                                seeds=seeds-amount;
+                                // Write your code here to invoke YES event
+                                Toast.makeText(getApplicationContext(), "Remaining seeds are "+seeds, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     //if control comes here
