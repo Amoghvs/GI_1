@@ -81,9 +81,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
 
     public View myContentsView;
 
-    SharedPreferences sharedpreferences;
-    public static final String MyPREFERENCES = "MyPref" ;
-    public static final String VAL = "Key";
+
 
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -158,10 +156,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putInt(VAL, 0);
-        editor.commit();
+
 
         cardView = findViewById(R.id.li);
         cardView.setVisibility(View.INVISIBLE);
@@ -206,10 +201,7 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         req.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putInt(VAL, 1);
-                editor.commit();
+
                 try {
                     client.publish(topic, rhint.getBytes(),0,false);
                 } catch (MqttException e) {
@@ -661,13 +653,13 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
     }
 
     private void subscribtion(){
-        try {
+        /*try {
             client.subscribe(topic,0);
         } catch (MqttSecurityException e) {
             e.printStackTrace();
         } catch (MqttException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 

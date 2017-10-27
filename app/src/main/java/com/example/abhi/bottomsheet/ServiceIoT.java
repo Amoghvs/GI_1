@@ -32,28 +32,23 @@ import org.eclipse.paho.client.mqttv3.MqttSecurityException;
  * Created by amogh on 26/10/17.
  */
 
-public class Servicee extends Service {
-
-    SharedPreferences sharedpreferences;
-    public static final String MyPREFERENCES = "MyPref" ;
-    public static final String VAL = "Key";
+public class ServiceIoT extends Service {
 
 
-    String host = "tcp://m11.cloudmqtt.com:16201";
+
+
+    String host = "tcp://m12.cloudmqtt.com:11871";
     // String clientId = "ExampleAndroidClient";
     String topic = "sensor/snd";
 
-    String username = "rcduaeoh";
-    String password = "hm3O7P_0KiXi";
+    String username = "zyekiwpb";
+    String password = "z58Alb-SFL-_";
 
     MqttAndroidClient client;
     IMqttToken token = null;
     MqttConnectOptions options;
 
     int val = 0;
-
-
-
 
 
     @Override
@@ -68,9 +63,6 @@ public class Servicee extends Service {
         options.setUserName(username);
         options.setPassword(password.toCharArray());
 
-        SharedPreferences settings = getSharedPreferences(MyPREFERENCES,
-                Context.MODE_PRIVATE);
-        val = settings.getInt(VAL, 0);
 
         try {
             token = client.connect(options);
@@ -108,11 +100,15 @@ public class Servicee extends Service {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 String msg = new String(message.getPayload());
-                Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
-                if (msg.equals("rhint"))
-                if(val==0){
-                    startNotification();
-
+                if(!msg.contains("value")) {
+                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                    if (msg.equals("rhint")) {
+                        if (val != 0) {
+                            Toast.makeText(getApplicationContext(), msg + "fuck this shit", Toast.LENGTH_SHORT).show();
+                        }
+                        val = 0;
+                        startNotification();
+                    }
                 }
 
             }
@@ -136,7 +132,7 @@ public class Servicee extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Let it continue running until it is stopped.
 
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "ServiceChat Started", Toast.LENGTH_LONG).show();
         return START_STICKY;
     }
 
@@ -144,7 +140,7 @@ public class Servicee extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "ServiceChat Destroyed", Toast.LENGTH_LONG).show();
     }
 
     private void subscribtion(){

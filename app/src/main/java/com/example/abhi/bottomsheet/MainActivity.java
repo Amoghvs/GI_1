@@ -2,10 +2,8 @@ package com.example.abhi.bottomsheet;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
@@ -16,6 +14,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,6 +30,10 @@ import com.example.abhi.bottomsheet.Coupons.CouponsShadowTransformer;
 import com.example.abhi.bottomsheet.DatabaseTransaction.PersonDatabaseHelper;
 import com.example.abhi.bottomsheet.EcoService.BatteryService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,19 +58,13 @@ public class MainActivity extends AppCompatActivity {
     private CouponsShadowTransformer mFragmentCardShadowTransformer;
     private static final int REQUEST_SELECT_PLACE = 1000;
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Name = "nameKey";
-    public static final String Seeds = "0";
 
     public String name = "NULL";
     public int seeds = 1000;
 
     public String currentDateTime;
 
-    SharedPreferences sharedpreferences;
 
-
-    private boolean mShowingFragments = false;
 
     public static float dpToPixels(int dp, Context context) {
         return dp * (context.getResources().getDisplayMetrics().density);
@@ -77,16 +74,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startService(new Intent(getBaseContext(),Servicee.class));
 
-        //sharedpreferences
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-
-        editor.putString(Name, "Abhishek");
-        editor.putInt(Seeds,1000);
-        editor.commit();
 
         if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.
@@ -139,11 +127,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Project GI");
         setSupportActionBar(toolbar);
 
-        //Seeds and name
-        SharedPreferences settings = getSharedPreferences(MyPREFERENCES,
-                Context.MODE_PRIVATE);
-        name = settings.getString(Name,"name");
-        seeds = settings.getInt(Seeds, 0);
 
         txtname =(TextView)findViewById(R.id.txt_name);
         txtseeds =(TextView)findViewById(R.id.txt_seeds);
@@ -197,6 +180,9 @@ public class MainActivity extends AppCompatActivity {
         mFragmentCardShadowTransformer.enableScaling(true);
 
 
+        save();
+
+
 
         //Main act cards onClick
 
@@ -205,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //databaseHelper.insertData("asd","tht");
                 startActivity(new Intent(MainActivity.this,Details.class));
+
             }
         });
         quotecard.setOnClickListener(new View.OnClickListener() {
@@ -232,6 +219,9 @@ public class MainActivity extends AppCompatActivity {
 
         //battery
         startService(new Intent(getBaseContext(), BatteryService.class));
+        startService(new Intent(getBaseContext(),ServiceIoT.class));
+        startService(new Intent(getBaseContext(),ServiceChat.class));
+
 
 
 
@@ -252,22 +242,66 @@ public class MainActivity extends AppCompatActivity {
 
     public void func(View view)
     {
-        Toast.makeText(MainActivity.this,"You bought card",Toast.LENGTH_SHORT).show();
-        databaseHelper.insertData("Bought a card",currentDateTime);
-
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-
-        editor.putString(Name, "Abhishek");
-        editor.putInt(Seeds,seeds-100);
-        editor.commit();
-
-        SharedPreferences settings = getSharedPreferences(MyPREFERENCES,
-                Context.MODE_PRIVATE);
-        name = settings.getString(Name,"name");
-        seeds = settings.getInt(Seeds, 0);
-
+        if(seeds-100>0) {
+            seeds=seeds-100;
+            Toast.makeText(MainActivity.this, "You bought card", Toast.LENGTH_SHORT).show();
+            databaseHelper.insertData("Bought a card", currentDateTime);
+        }
         txtseeds.setText(String.valueOf(seeds));
 
 
+    }
+
+    public void  save()  // SAVE
+    {
+        File file= null;
+
+
+        FileOutputStream fileOutputStream = null;
+        try {
+            name = "Abhishek ";
+            file = getFilesDir();
+            fileOutputStream = openFileOutput("Code.txt", Context.MODE_PRIVATE); //MODE PRIVATE
+            fileOutputStream.write(name.getBytes());
+            fileOutputStream.write(String.valueOf(seeds).getBytes());
+            Toast.makeText(this, "Saved \n" + "Path --" + file + "\tCode.txt", Toast.LENGTH_SHORT).show();
+            return;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void  load()
+    {
+        try {
+            FileInputStream fileInputStream =  openFileInput("Code.txt");
+            int read = -1;
+            StringBuffer buffer = new StringBuffer();
+            while((read =fileInputStream.read())!= -1){
+                buffer.append((char)read);
+            }
+            Log.d("Code", buffer.toString());
+            name = buffer.substring(0,buffer.indexOf(" "));
+            seeds = Integer.parseInt((buffer.substring(buffer.indexOf(" ")-1)));
+
+            Toast.makeText(this,buffer.substring(0,buffer.indexOf(" ")), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,(buffer.substring(buffer.indexOf(" ")-1)), Toast.LENGTH_SHORT).show();
+
+            txtseeds.setText(String.valueOf(seeds));
+            txtname.setText(name);
+
+        } catch (Exception e) {
+            Toast.makeText(this,"cant do", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+
+        Toast.makeText(this,"Loaded", Toast.LENGTH_SHORT).show();
     }
 }

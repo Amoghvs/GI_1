@@ -59,8 +59,8 @@
         <activity android:name=".Chat_act" />
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
-        <service android:name=".Servicee" />
-
+        <service android:name=".ServiceIoT" />
+        <service android:name=".ServiceChat" />
         <activity android:name=".Ride_act" />
     </application>
 
