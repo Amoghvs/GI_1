@@ -18,6 +18,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -74,9 +75,15 @@ import java.util.Locale;
 import java.util.Random;
 
 
+
+
 public class Carpool_act extends FragmentActivity implements OnMapReadyCallback, PlaceSelectionListener {
 
     public View myContentsView;
+
+    SharedPreferences sharedpreferences;
+    public static final String MyPREFERENCES = "MyPref" ;
+    public static final String VAL = "Key";
 
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -151,6 +158,11 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putInt(VAL, 0);
+        editor.commit();
+
         cardView = findViewById(R.id.li);
         cardView.setVisibility(View.INVISIBLE);
         dur = findViewById(R.id.duration);
@@ -194,8 +206,10 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         req.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startNotification();
+                sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putInt(VAL, 1);
+                editor.commit();
                 try {
                     client.publish(topic, rhint.getBytes(),0,false);
                 } catch (MqttException e) {
@@ -656,64 +670,8 @@ public class Carpool_act extends FragmentActivity implements OnMapReadyCallback,
         }
     }
 
-    private void startNotification(){
-
-            // Set Notification Title
-            String strtitle = getString(R.string.notificationtitle);
-            // Set Notification Text
-            String strtext = getString(R.string.notificationtext);
-
-            // Open NotificationView Class on Notification Click
-            Intent intent = new Intent(this, Ride_act.class);
-            // Send data to NotificationView Class
-            intent.putExtra("title", strtitle);
-            intent.putExtra("text", strtext);
-            // Open NotificationView.java Activity
-            PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Intent intent2 = new Intent(this, Carpool_act.class);
-            // Send data to NotificationView Class
-            intent2.putExtra("title", strtitle);
-            intent2.putExtra("text", strtext);
-            // Open NotificationView.java Activity
-            PendingIntent pIntent2 = PendingIntent.getActivity(this, 0, intent2,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-            //Create Notification using NotificationCompat.Builder
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                    // Set Icon
-                    .setSmallIcon(R.drawable.logo)
-                    // Set Ticker Message
-                    .setTicker(getString(R.string.notificationticker))
-                    // Set Title
-                    .setContentTitle("Someone wants to join")
-                    // Set Text
-                    .setContentText(getString(R.string.notificationtext))
-                    .addAction(R.drawable.cast_ic_notification_0, "Accept", pIntent)
-                    // Add an Action Button below Notification
-                    .addAction(R.drawable.cast_ic_notification_0, "Reject", pIntent2)
-                    // Set PendingIntent into Notification
-                    .setContentIntent(pIntent)
-                    // Dismiss Notification
-                    .setAutoCancel(true);
 
 
-            // Create Notification Manager
-            NotificationManager notificationmanager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            // Build Notification with Notification Manager
-            notificationmanager.notify(0, builder.build());
 
-
-    }
-
-
-    public static class switchButtonListener extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d("Here", "I am here");
-            Toast.makeText(context,"Noticationnnnnn",Toast.LENGTH_SHORT).show();
-        }
-    }
 
 }

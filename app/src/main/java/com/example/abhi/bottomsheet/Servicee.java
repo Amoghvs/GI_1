@@ -4,10 +4,15 @@ package com.example.abhi.bottomsheet;
  * Created by anuj on 27/10/17.
  */
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,6 +34,9 @@ import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 
 public class Servicee extends Service {
 
+    SharedPreferences sharedpreferences;
+    public static final String MyPREFERENCES = "MyPref" ;
+    public static final String VAL = "Key";
 
 
     String host = "tcp://m11.cloudmqtt.com:16201";
@@ -41,6 +49,8 @@ public class Servicee extends Service {
     MqttAndroidClient client;
     IMqttToken token = null;
     MqttConnectOptions options;
+
+    int val = 0;
 
 
 
@@ -57,6 +67,10 @@ public class Servicee extends Service {
         options = new MqttConnectOptions();
         options.setUserName(username);
         options.setPassword(password.toCharArray());
+
+        SharedPreferences settings = getSharedPreferences(MyPREFERENCES,
+                Context.MODE_PRIVATE);
+        val = settings.getInt(VAL, 0);
 
         try {
             token = client.connect(options);
@@ -95,9 +109,10 @@ public class Servicee extends Service {
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 String msg = new String(message.getPayload());
                 Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
-                if (msg.equals("rhint")){
-                    Intent i = new Intent(Servicee.this,Ride_act.class);
-                    startActivity(i);
+                if (msg.equals("rhint"))
+                if(val==0){
+                    startNotification();
+
                 }
 
             }
@@ -142,5 +157,65 @@ public class Servicee extends Service {
         }
     }
 
+    private void startNotification(){
+
+        // Set Notification Title
+        String strtitle = getString(R.string.notificationtitle);
+        // Set Notification Text
+        String strtext = getString(R.string.notificationtext);
+
+        // Open NotificationView Class on Notification Click
+        Intent intent = new Intent(this, Ride_act.class);
+        // Send data to NotificationView Class
+        intent.putExtra("title", strtitle);
+        intent.putExtra("text", strtext);
+        // Open NotificationView.java Activity
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent intent2 = new Intent(this, Carpool_act.class);
+        // Send data to NotificationView Class
+        intent2.putExtra("title", strtitle);
+        intent2.putExtra("text", strtext);
+        // Open NotificationView.java Activity
+        PendingIntent pIntent2 = PendingIntent.getActivity(this, 0, intent2,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent intent3 = new Intent(this, Chat_act.class);
+        // Send data to NotificationView Class
+        intent3.putExtra("title", strtitle);
+        intent3.putExtra("text", strtext);
+        // Open NotificationView.java Activity
+        PendingIntent pIntent3 = PendingIntent.getActivity(this, 0, intent3,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //Create Notification using NotificationCompat.Builder
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                // Set Icon
+                .setSmallIcon(R.drawable.logo)
+                // Set Ticker Message
+                .setTicker(getString(R.string.notificationticker))
+                // Set Title
+                .setContentTitle("Bla blah wants to carpool.")
+                // Set Text
+                .setContentText(getString(R.string.notificationtext))
+                .addAction(R.drawable.cast_ic_notification_0, "Accept", pIntent)
+                // Add an Action Button below Notification
+                .addAction(R.drawable.cast_ic_notification_0, "Reject", pIntent2)
+
+                .addAction(R.drawable.cast_ic_notification_0, "Message", pIntent3)
+                // Set PendingIntent into Notification
+                .setContentIntent(pIntent)
+                // Dismiss Notification
+                .setAutoCancel(true);
+
+
+        // Create Notification Manager
+        NotificationManager notificationmanager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // Build Notification with Notification Manager
+        notificationmanager.notify(0, builder.build());
+
+
+    }
 
 }
