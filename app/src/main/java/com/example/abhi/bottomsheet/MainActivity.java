@@ -29,6 +29,11 @@ import com.example.abhi.bottomsheet.Coupons.CouponsCardPagerAdapter;
 import com.example.abhi.bottomsheet.Coupons.CouponsShadowTransformer;
 import com.example.abhi.bottomsheet.DatabaseTransaction.PersonDatabaseHelper;
 import com.example.abhi.bottomsheet.EcoService.BatteryService;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,6 +43,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     BottomSheetBehavior mBottomSheetBehavior;
@@ -46,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
     CardView maincard,quotecard,homecard,transcard;
     private GridLayoutManager lLayout;
     private Button buybut;
+    ImageView qrcsn;
     private ViewPager mViewPager;
+    private IntentIntegrator qrScan;
 
     public Toolbar toolbar;
 
@@ -70,11 +82,12 @@ public class MainActivity extends AppCompatActivity {
         return dp * (context.getResources().getDisplayMetrics().density);
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.
@@ -222,7 +235,15 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(getBaseContext(),ServiceIoT.class));
         startService(new Intent(getBaseContext(),ServiceChat.class));
 
+        qrcsn = (ImageView) findViewById(R.id.qr);
+        qrScan = new IntentIntegrator(this);
 
+        qrcsn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                qrScan.initiateScan();
+            }
+        });
 
 
 
@@ -304,4 +325,37 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this,"Loaded", Toast.LENGTH_SHORT).show();
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            //if qrcode has nothing in it
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
+            } else {
+                //if qr contains data
+                try {
+                    //converting the data to json
+                    JSONObject obj = new JSONObject(result.getContents());
+                    //setting values to textviews
+                    //textViewName.setText(obj.getString("name"));
+                    Toast.makeText(getApplicationContext(),obj.getString("name"),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),obj.getString("address"),Toast.LENGTH_SHORT).show();
+                    //   /textViewAddress.setText(obj.getString("address"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    //if control comes here
+                    //that means the encoded format not matches
+                    //in this case you can display whatever data is available on the qrcode
+                    //to a toast
+                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                }
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 }
