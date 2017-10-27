@@ -20,9 +20,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         android:layout_height="@dimen/material_app_bar_default_height">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+
 
         <ImageView
             android:layout_width="wrap_content"
@@ -30,9 +28,10 @@
             android:layout_alignParentEnd="true"
             android:padding="5dp"
             android:id="@+id/qr"
+            android:layout_marginLeft="320dp"
             android:background="@drawable/ic_center_focus_weak_black_24dp"
             />
-        </RelativeLayout>
+
     </android.support.v7.widget.Toolbar>
 
 

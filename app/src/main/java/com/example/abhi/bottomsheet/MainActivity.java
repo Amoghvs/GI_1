@@ -301,8 +301,10 @@ public class MainActivity extends AppCompatActivity {
                 buffer.append((char)read);
             }
             Log.d("Code", buffer.toString());
-            named = buffer.substring(0,buffer.indexOf(" "));
-            seeds = Integer.parseInt((buffer.substring(buffer.indexOf(" ")+1)).toString());
+
+            String array[] = buffer.toString().split(" ");
+            named = array[0];
+            seeds = Integer.parseInt(array[1]);
 
             txtseeds.setText(String.valueOf(seeds));
             txtname.setText(named);

@@ -47,7 +47,6 @@ public class Login_act extends AppCompatActivity {
         ButterKnife.inject(this);
 
 
-
     }
 
     @OnClick({R.id.bt_go, R.id.fab})
@@ -66,14 +65,15 @@ public class Login_act extends AppCompatActivity {
                 }
                 break;
             case R.id.bt_go:
-                Explode explode = new Explode();
-                explode.setDuration(500);
+
                 name = etUsername.getText().toString();
+                save();
 
 
                 ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
                 Intent i2 = new Intent(this,MainActivity.class);
                 startActivity(i2, oc2.toBundle());
+                finish();
                 break;
         }
     }
@@ -84,11 +84,10 @@ public class Login_act extends AppCompatActivity {
 
         FileOutputStream fileOutputStream = null;
         try {
-            name = "Abhishek ";
             file = getFilesDir();
             fileOutputStream = openFileOutput("Code.txt", Context.MODE_PRIVATE); //MODE PRIVATE
-            fileOutputStream.write(name.getBytes());
-            fileOutputStream.write(String.valueOf(1000).getBytes());
+            fileOutputStream.write((name+" ").getBytes());
+            fileOutputStream.write("1000".getBytes());
             Toast.makeText(this, "Saved \n" + "Path --" + file + "\tCode.txt", Toast.LENGTH_SHORT).show();
             return;
         } catch (Exception ex) {
