@@ -11,7 +11,9 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttSecurityException;
-
+import com.mahfa.dnswitch.DayNightSwitch;
+import com.mahfa.dnswitch.DayNightSwitchAnimListener;
+import com.mahfa.dnswitch.DayNightSwitchListener;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
