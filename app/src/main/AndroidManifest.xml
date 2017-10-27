@@ -58,10 +58,11 @@
         <activity android:name=".ConnLost_act" />
         <activity android:name=".Chat_act" />
 
-        <service android:name="org.eclipse.paho.android.service.MqttService"></service>
-        <service android:name=".Servicee"></service>
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
+        <service android:name=".Servicee" />
 
-        <activity android:name=".Ride_act"></activity>
+        <activity android:name=".Ride_act" />
+        <activity android:name=".Payment_act"></activity>
     </application>
 
 </manifest>
