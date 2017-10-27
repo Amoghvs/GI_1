@@ -1,5 +1,6 @@
 package com.example.abhi.bottomsheet;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -49,10 +50,13 @@ public class Chat_act extends AppCompatActivity {
     EditText edit;
     String pub="",sub="";
     CardView cardView;
-    public static final String MyPREFERENCES = "MyPrefs" ;
-     String nameg = "nameKey";
+
+    String nameg = "nameKey";
 
     SharedPreferences sharedpreferences;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
 
     List<RowItem> rowItems;
 
@@ -62,12 +66,10 @@ public class Chat_act extends AppCompatActivity {
         setContentView(R.layout.activity_chat_act);
 
 
-        SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-        String restoredText = prefs.getString("text", null);
-        if (restoredText != null) {
-             nameg = prefs.getString("name", "Anonymous");//"No name defined" is the default value.
-            //int idName = prefs.getInt("idName", 0); //0 is the default value.
-        }
+        SharedPreferences settings = getSharedPreferences(MyPREFERENCES,
+                Context.MODE_PRIVATE);
+        nameg = settings.getString(Name,"name");
+
 
 
         // Get reference of widgets from XML layout
