@@ -1,9 +1,12 @@
 package com.example.abhi.bottomsheet;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +15,11 @@ import android.transition.Explode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,12 +38,16 @@ public class Login_act extends AppCompatActivity {
     CardView cv;
     @InjectView(R.id.fab)
     FloatingActionButton fab;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_act);
         ButterKnife.inject(this);
+
+
+
     }
 
     @OnClick({R.id.bt_go, R.id.fab})
@@ -56,13 +68,37 @@ public class Login_act extends AppCompatActivity {
             case R.id.bt_go:
                 Explode explode = new Explode();
                 explode.setDuration(500);
+                name = etUsername.getText().toString();
 
-                getWindow().setExitTransition(explode);
-                getWindow().setEnterTransition(explode);
+
                 ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
                 Intent i2 = new Intent(this,MainActivity.class);
                 startActivity(i2, oc2.toBundle());
                 break;
+        }
+    }
+    public void  save()  // SAVE
+    {
+        File file= null;
+
+
+        FileOutputStream fileOutputStream = null;
+        try {
+            name = "Abhishek ";
+            file = getFilesDir();
+            fileOutputStream = openFileOutput("Code.txt", Context.MODE_PRIVATE); //MODE PRIVATE
+            fileOutputStream.write(name.getBytes());
+            fileOutputStream.write(String.valueOf(1000).getBytes());
+            Toast.makeText(this, "Saved \n" + "Path --" + file + "\tCode.txt", Toast.LENGTH_SHORT).show();
+            return;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

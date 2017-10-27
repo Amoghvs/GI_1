@@ -2,9 +2,11 @@ package com.example.abhi.bottomsheet;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -71,10 +73,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_SELECT_PLACE = 1000;
 
 
-    public String name = "NULL";
-    public int seeds = 1000;
+    public String named="";
+    public int seeds = 0;
 
     public String currentDateTime;
+    public  TextView homestat;
 
 
 
@@ -102,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+
+        Toast.makeText(getApplicationContext(),named,Toast.LENGTH_SHORT).show();
+
         //Database
         databaseHelper = new PersonDatabaseHelper(this);
 
@@ -127,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
+        homestat = (TextView) findViewById(R.id.txt_original_date);
         swipe =(TextView)findViewById(R.id.swipe);
         maincard=(CardView)findViewById(R.id.maincard);
         quotecard=(CardView)findViewById(R.id.quotecard);
@@ -145,8 +152,7 @@ public class MainActivity extends AppCompatActivity {
         txtseeds =(TextView)findViewById(R.id.txt_seeds);
 
 
-        txtname.setText(name);
-        txtseeds.setText(String.valueOf(seeds));
+        load();
 
 
         List<BottomSheetItemObject> rowListItem = getAllItemList();
@@ -191,10 +197,6 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(1);
         mCardShadowTransformer.enableScaling(true);
         mFragmentCardShadowTransformer.enableScaling(true);
-
-
-        save();
-
 
 
         //Main act cards onClick
@@ -263,40 +265,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void func(View view)
     {
-        if(seeds-100>0) {
+        if(seeds-100>=0) {
             seeds=seeds-100;
             Toast.makeText(MainActivity.this, "You bought card", Toast.LENGTH_SHORT).show();
             databaseHelper.insertData("Bought a card", currentDateTime);
         }
+        else
+            Toast.makeText(MainActivity.this, "You don't have enough credits for this transaction", Toast.LENGTH_SHORT).show();
+
         txtseeds.setText(String.valueOf(seeds));
 
 
     }
 
-    public void  save()  // SAVE
-    {
-        File file= null;
 
-
-        FileOutputStream fileOutputStream = null;
-        try {
-            name = "Abhishek ";
-            file = getFilesDir();
-            fileOutputStream = openFileOutput("Code.txt", Context.MODE_PRIVATE); //MODE PRIVATE
-            fileOutputStream.write(name.getBytes());
-            fileOutputStream.write(String.valueOf(seeds).getBytes());
-            Toast.makeText(this, "Saved \n" + "Path --" + file + "\tCode.txt", Toast.LENGTH_SHORT).show();
-            return;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                fileOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public void  load()
     {
@@ -308,14 +290,11 @@ public class MainActivity extends AppCompatActivity {
                 buffer.append((char)read);
             }
             Log.d("Code", buffer.toString());
-            name = buffer.substring(0,buffer.indexOf(" "));
-            seeds = Integer.parseInt((buffer.substring(buffer.indexOf(" ")-1)));
-
-            Toast.makeText(this,buffer.substring(0,buffer.indexOf(" ")), Toast.LENGTH_SHORT).show();
-            Toast.makeText(this,(buffer.substring(buffer.indexOf(" ")-1)), Toast.LENGTH_SHORT).show();
+            named = buffer.substring(0,buffer.indexOf(" "));
+            seeds = Integer.parseInt((buffer.substring(buffer.indexOf(" ")+1)).toString());
 
             txtseeds.setText(String.valueOf(seeds));
-            txtname.setText(name);
+            txtname.setText(named);
 
         } catch (Exception e) {
             Toast.makeText(this,"cant do", Toast.LENGTH_SHORT).show();
@@ -341,9 +320,14 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject obj = new JSONObject(result.getContents());
                     //setting values to textviews
                     //textViewName.setText(obj.getString("name"));
-                    Toast.makeText(getApplicationContext(),obj.getString("name"),Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getApplicationContext(),obj.getString("address"),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),obj.getString("name"),Toast.LENGTH_SHORT).show();
+
+                    //Toast.makeText(getApplicationContext(),obj.getString("address"),Toast.LENGTH_SHORT).show();
                     //   /textViewAddress.setText(obj.getString("address"));
+
+                    if (obj.getString("name").equals("Namespace")){
+                        homestat.setText("Connected to Home");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     //if control comes here
