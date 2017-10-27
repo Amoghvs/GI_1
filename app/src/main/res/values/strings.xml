@@ -16,6 +16,17 @@
         <item>Reduce carbon</item>
     </string-array>
 
+    <string name="notificationtitle">Android Notification Tutorial</string>
+    <string name="notificationtext">Notification Text</string>
+    <string name="notificationticker">Notification Ticker</string>
+    <string name="customnotificationtitle">Android Notification Tutorial</string>
+    <string name="customnotificationtext">Custom Notification Text</string>
+    <string name="customnotificationticker">Custom Notification Ticker</string>
+    <string name="lbltitle">"Title : "</string>
+    <string name="lbltext">"Text : "</string>
+    <string name="notification">Notification</string>
+    <string name="customnotification">Custom Notification</string>
+
     <string name="title_1">Mc.D card</string>
     <string name="title_2">KFC card</string>
     <string name="title_3">Amazon card</string>
