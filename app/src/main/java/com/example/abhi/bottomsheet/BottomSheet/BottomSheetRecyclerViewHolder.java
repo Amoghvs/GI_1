@@ -45,10 +45,10 @@ public class BottomSheetRecyclerViewHolder extends RecyclerView.ViewHolder imple
             case 1 :
                 context.startActivity(new Intent(context,Recycler_act.class));
                 break;
-            case 3 :
+            case 2 :
                 context.startActivity(new Intent(context,HomeAccount.class));
                 break;
-            case 4 :
+            case 3 :
                 context.startActivity(new Intent(context,CarAct.class));
                 break;
 
