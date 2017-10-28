@@ -61,10 +61,13 @@
         <service android:name="org.eclipse.paho.android.service.MqttService" />
         <service android:name=".ServiceIoT" />
         <service android:name=".ServiceChat" />
+
         <activity android:name=".Ride_act" />
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".RegisterActivity"
+        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".RegisterActivity"
             android:theme="@style/Translucent" />
+        <activity android:name=".DriveOver"></activity>
     </application>
 
 </manifest>

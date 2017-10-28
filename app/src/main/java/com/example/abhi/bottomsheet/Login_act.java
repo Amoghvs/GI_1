@@ -88,7 +88,7 @@ public class Login_act extends AppCompatActivity {
             fileOutputStream = openFileOutput("Code.txt", Context.MODE_PRIVATE); //MODE PRIVATE
             fileOutputStream.write((name+" ").getBytes());
             fileOutputStream.write("1000".getBytes());
-            Toast.makeText(this, "Saved \n" + "Path --" + file + "\tCode.txt", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Saved \n" + "Path --" + file + "\tCode.txt", Toast.LENGTH_SHORT).show();
             return;
         } catch (Exception ex) {
             ex.printStackTrace();

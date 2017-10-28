@@ -22,15 +22,7 @@
 
 
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:padding="5dp"
-            android:id="@+id/qr"
-            android:layout_marginLeft="320dp"
-            android:background="@drawable/ic_center_focus_weak_black_24dp"
-            />
+
 
     </android.support.v7.widget.Toolbar>
 
@@ -109,6 +101,15 @@
                         android:gravity="right"
                         android:orientation="vertical"
                         >
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:padding="5dp"
+                            android:id="@+id/qr"
+                            android:layout_marginLeft="320dp"
+                            android:background="@drawable/ic_center_focus_weak_black_24dp"
+                            />
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -344,7 +345,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="No transactions made"
+                        android:text="Click to see ransactions"
                         android:textColor="@color/material_color_deep_purple_500"/>
 
                 </LinearLayout>

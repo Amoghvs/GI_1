@@ -8,20 +8,29 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import com.example.abhi.bottomsheet.R;
 
 
 public class DialogAct extends AppCompatActivity {
 
-    private long timeCountInMilliSeconds = 5 * 60000;
+    private long timeCountInMilliSeconds = 1 * 60000;
 
+    String named;
+    int seeds;
     public MediaPlayer mp;
 
 
@@ -42,12 +51,14 @@ public class DialogAct extends AppCompatActivity {
     final Context context = this;
     private Button button;
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
 
         button = (Button) findViewById(R.id.buttonShowCustomDialog);
+
+        load();
 
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         mp = MediaPlayer.create(getApplicationContext(), notification);
@@ -88,6 +99,9 @@ public class DialogAct extends AppCompatActivity {
                     public void onClick(View v) {
                         dialog.dismiss();
                         mp.stop();
+                        Toast.makeText(getApplicationContext(),"You just saved yourself from losing 5 seeds, but sorry we will have to deduct 2 seeds from our account",Toast.LENGTH_LONG).show();
+                        seeds=seeds-2;
+                        save();
                         finish();
 
 
@@ -95,7 +109,12 @@ public class DialogAct extends AppCompatActivity {
                 });
 
                 dialog.show();
-                startStop();
+                if(timerStatus==TimerStatus.STOPPED)
+                {
+                    load();
+                    seeds=seeds-5;
+                    save();
+                }
 
             }
         });
@@ -209,5 +228,55 @@ public class DialogAct extends AppCompatActivity {
 
 
     }
+
+    public void  load()
+    {
+        try {
+            FileInputStream fileInputStream =  openFileInput("Code.txt");
+            int read = -1;
+            StringBuffer buffer = new StringBuffer();
+            while((read =fileInputStream.read())!= -1){
+                buffer.append((char)read);
+            }
+            Log.d("Code", buffer.toString());
+
+            String array[] = buffer.toString().split(" ");
+            named = array[0];
+            seeds = Integer.parseInt(array[1]);
+
+
+        } catch (Exception e) {
+            Toast.makeText(this,"cant do", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+
+        Toast.makeText(this,"Loaded", Toast.LENGTH_SHORT).show();
+    }
+
+    public void  save()  // SAVE
+    {
+        File file= null;
+
+
+        FileOutputStream fileOutputStream = null;
+        try {
+            file = getFilesDir();
+            fileOutputStream = openFileOutput("Code.txt", Context.MODE_PRIVATE); //MODE PRIVATE
+            fileOutputStream.write((named+" ").getBytes());
+            fileOutputStream.write(String.valueOf(seeds).getBytes());
+            //Toast.makeText(this, "Saved \n" + "Path --" + file + "\tCode.txt", Toast.LENGTH_SHORT).show();
+            return;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
 

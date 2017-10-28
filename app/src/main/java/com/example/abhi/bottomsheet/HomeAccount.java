@@ -24,14 +24,6 @@ public class HomeAccount extends AppCompatActivity {
         final String name = settings.getString(Name,"name");
         final int seeds = settings.getInt(Seeds, 0);
 
-        Button button = (Button) findViewById(R.id.but);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"dsfds"+name+seeds,Toast.LENGTH_SHORT).show();
-
-            }
-        });
 
     }
 }

@@ -78,14 +78,14 @@ public class ServiceChat extends Service {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     // We are connected
-                    Toast.makeText(getApplicationContext(),"Connection successful",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"Connection successful",Toast.LENGTH_SHORT).show();
                     subscribtion();
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     // Something went wrong e.g. connection timeout or firewall problems
-                    Toast.makeText(getApplicationContext(),"Connection failed",Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(),"Connection failed",Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -103,7 +103,7 @@ public class ServiceChat extends Service {
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 String msg = new String(message.getPayload());
                 if(!msg.contains("value")) {
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     if (msg.equals("rhint")) {
                         if (val != 0) {
                             Toast.makeText(getApplicationContext(), msg + "fuck this shit", Toast.LENGTH_SHORT).show();
@@ -138,7 +138,7 @@ public class ServiceChat extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Let it continue running until it is stopped.
 
-        Toast.makeText(this, "ServiceChat Started", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "ServiceChat Started", Toast.LENGTH_LONG).show();
         return START_STICKY;
     }
 
@@ -146,7 +146,7 @@ public class ServiceChat extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "ServiceChat Destroyed", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "ServiceChat Destroyed", Toast.LENGTH_LONG).show();
     }
 
     private void subscribtion(){
