@@ -214,8 +214,8 @@ public class MainActivity extends AppCompatActivity {
         quotecard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseHelper.DatabaseDrop();
-                //startActivity(new Intent(MainActivity.this,QuotesAct.class));
+                //databaseHelper.DatabaseDrop();
+                startActivity(new Intent(MainActivity.this,Tips.class));
             }
         });
         homecard.setOnClickListener(new View.OnClickListener() {

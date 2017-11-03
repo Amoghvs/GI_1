@@ -15,6 +15,7 @@ import android.icu.util.Calendar;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -30,6 +31,11 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttSecurityException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 /**
@@ -51,6 +57,8 @@ public class ServiceIoT extends Service {
     MqttAndroidClient client;
     IMqttToken token = null;
     MqttConnectOptions options;
+    int seeds;
+    String named;
 
     int val = 0;
 
@@ -67,9 +75,16 @@ public class ServiceIoT extends Service {
         options.setUserName(username);
         options.setPassword(password.toCharArray());
 
+        Calendar c = Calendar.getInstance();
+        String sData = c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE) + ":"+c.get(Calendar.SECOND);
+
+       if(sData.equals("0:0:0")) {
+           load();
+           seeds += 10;
+           save();
+       }
 
 
-        
 
 
 
@@ -114,11 +129,15 @@ public class ServiceIoT extends Service {
                     if (msg.contains("car")) {
                         startNotification();
                     }
+                    if (msg.contains("car")) {
+                        startNotification();
+                    }
                     if (msg.contains("w")){
                         val++;
                         if(val==20)
                         {
                             startActivity(new Intent(ServiceIoT.this, DialogAct.class));
+
                         }
                     }
                 }
@@ -163,6 +182,55 @@ public class ServiceIoT extends Service {
         } catch (MqttException e) {
             e.printStackTrace();
         }
+    }
+
+    public void  save()  // SAVE
+    {
+        File file= null;
+
+
+        FileOutputStream fileOutputStream = null;
+        try {
+            file = getFilesDir();
+            fileOutputStream = openFileOutput("Code.txt", Context.MODE_PRIVATE); //MODE PRIVATE
+            fileOutputStream.write((named+" ").getBytes());
+            fileOutputStream.write(String.valueOf(seeds).getBytes());
+            //Toast.makeText(this, "Saved \n" + "Path --" + file + "\tCode.txt", Toast.LENGTH_SHORT).show();
+            return;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void  load()
+    {
+        try {
+            FileInputStream fileInputStream =  openFileInput("Code.txt");
+            int read = -1;
+            StringBuffer buffer = new StringBuffer();
+            while((read =fileInputStream.read())!= -1){
+                buffer.append((char)read);
+            }
+            Log.d("Code", buffer.toString());
+
+            String array[] = buffer.toString().split(" ");
+            named = array[0];
+            seeds = Integer.parseInt(array[1]);
+
+
+        } catch (Exception e) {
+            Toast.makeText(this,"cant do", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+
+        Toast.makeText(this,"Loaded", Toast.LENGTH_SHORT).show();
     }
 
     private void startNotification(){

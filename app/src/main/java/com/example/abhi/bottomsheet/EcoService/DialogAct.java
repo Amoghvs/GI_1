@@ -23,9 +23,34 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import com.example.abhi.bottomsheet.R;
+import com.example.abhi.bottomsheet.RowItem;
+
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 
 
 public class DialogAct extends AppCompatActivity {
+
+    String host = "tcp://m12.cloudmqtt.com:11871";
+    // String clientId = "ExampleAndroidClient";
+    String topic = "topic/iot";
+
+    String username = "zyekiwpb";
+    String password = "z58Alb-SFL-_";
+
+    MqttAndroidClient client;
+    IMqttToken token = null;
+    MqttConnectOptions options;
+    String pub="",sub="";
+
 
     private long timeCountInMilliSeconds = 1 * 60000;
 
@@ -102,6 +127,11 @@ public class DialogAct extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"You just saved yourself from losing 5 seeds, but sorry we will have to deduct 2 seeds from our account",Toast.LENGTH_LONG).show();
                         seeds=seeds-2;
                         save();
+                        try {
+                            client.publish(topic, "off".getBytes(), 0, false);
+                        } catch (MqttException e) {
+                            e.printStackTrace();
+                        }
                         finish();
 
 
@@ -114,12 +144,138 @@ public class DialogAct extends AppCompatActivity {
                     load();
                     seeds=seeds-5;
                     save();
+                    try {
+                        client.publish(topic, "off".getBytes(), 0, false);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
         });
         button.callOnClick();
+
+        String clientId = MqttClient.generateClientId();
+        client = new MqttAndroidClient(this.getApplicationContext(), host, clientId);
+
+        options = new MqttConnectOptions();
+        options.setUserName(username);
+        options.setPassword(password.toCharArray());
+
+        try {
+            token = client.connect(options);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            token = client.connect(options);
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    // We are connected
+                    Toast.makeText(getApplicationContext(),"Connection successful",Toast.LENGTH_SHORT).show();
+                    subscribtion();
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    // Something went wrong e.g. connection timeout or firewall problems
+                    Toast.makeText(getApplicationContext(),"Connection failed",Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        client.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                //textView.setText(new String(message.getPayload()));
+                String temp = new String(message.getPayload());
+                if(!temp.equals(sub))
+                    if(!temp.equals(pub)){
+                        sub = temp ;
+
+                    }
+
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
     }
+
+    private void subscribtion(){
+        try {
+            client.subscribe(topic,0);
+        } catch (MqttSecurityException e) {
+            e.printStackTrace();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void connect(View view){
+
+        try {
+            Toast.makeText(getApplicationContext(),"Hi",Toast.LENGTH_SHORT).show();
+            token = client.connect(options);
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    // We are connected
+                    Toast.makeText(getApplicationContext(),"Connection successful",Toast.LENGTH_SHORT).show();
+                    subscribtion();
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    // Something went wrong e.g. connection timeout or firewall problems
+                    Toast.makeText(getApplicationContext(),"Connection failed",Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void disconnect(View view){
+
+        try {
+            token = client.disconnect();
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    // We are connected
+                    Toast.makeText(getApplicationContext(),"Disconnected",Toast.LENGTH_SHORT).show();
+
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    // Something went wrong e.g. connection timeout or firewall problems
+                    Toast.makeText(getApplicationContext(),"Disconnection failed",Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
 
 
     private void startStop() {

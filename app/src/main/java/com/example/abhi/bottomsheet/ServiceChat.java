@@ -105,14 +105,7 @@ public class ServiceChat extends Service {
                 if(!msg.contains("value")) {
                     //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     if (msg.equals("rhint")) {
-                        if (val != 0) {
-                            Toast.makeText(getApplicationContext(), msg + "fuck this shit", Toast.LENGTH_SHORT).show();
-                        }
-                        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putInt(VAL, 0);
-                        editor.commit();
-                        val = 0;
+
                         startNotification();
                     }
                 }
